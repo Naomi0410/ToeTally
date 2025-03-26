@@ -19,7 +19,7 @@ const AddToCart = () => {
       try {
         console.log("Product ID:", productId); // Debugging
         const response = await axios.get(
-          `https://toetally-backend-3.onrender.com/api/products/${productId}`
+          `https://backend-toetally-1.onrender.com/api/products/${productId}`
         );
         if (!response.data) throw new Error("No product found.");
         console.log("Fetched product:", response.data); // Debugging
@@ -60,7 +60,7 @@ const AddToCart = () => {
     const cartItem = {
       productId: product._id,
       title: product.title, // Ensure title is included
-      quantity: 1,
+      quantity: quantity,
       size: selectedSize,
     };
 

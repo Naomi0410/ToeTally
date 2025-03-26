@@ -28,7 +28,7 @@ const Drawer = () => {
           return;
         }
         const response = await axios.get(
-          `https://backend-toetally.onrender.com/api/auth/getUser/${id}`,
+          `https://backend-toetally-1.onrender.com/api/auth/getUser/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

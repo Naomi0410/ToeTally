@@ -24,7 +24,7 @@ const Shop = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://toetally-backend-3.onrender.com/api/products"
+          "https://backend-toetally-1.onrender.com/api/products"
         );
         setProducts(response.data);
         setFilteredProducts(response.data);

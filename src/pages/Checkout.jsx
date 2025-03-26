@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { formatCurrency, validateFields } from "../utils";
 import { Subscribe } from "../components";
 import Alert from "../components/alert/Alert";
-const API_BASE_URL = "https://toetally-backend-3.onrender.com/api";
+const API_BASE_URL = "https://backend-toetally-1.onrender.com/api";
 
 const Checkout = () => {
   const navigate = useNavigate();
