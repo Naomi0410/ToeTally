@@ -17,7 +17,7 @@ const handleSubscribe = async (email) => {
 
   try {
     const response = await axios.post(
-      "https://backend-toetally.onrender.com/api/sub/newsletter",
+      "https://toetally-backend-3.onrender.com/api/sub/newsletter",
       { email }
     );
     console.log("Response from backend:", response.data);

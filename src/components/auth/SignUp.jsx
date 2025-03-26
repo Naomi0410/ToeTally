@@ -50,7 +50,7 @@ const SignUp = () => {
 
     try {
       const response = await fetch(
-        "https://backend-toetally.onrender.com/api/auth/signup",
+        "https://toetally-backend-3.onrender.com/api/auth/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

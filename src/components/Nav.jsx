@@ -35,7 +35,7 @@ const Nav = () => {
           return;
         }
         const response = await axios.get(
-          `https://backend-toetally.onrender.com/api/auth/getUser/${id}`,
+          `https://toetally-backend-3.onrender.com/api/auth/getUser/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

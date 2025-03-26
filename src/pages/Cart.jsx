@@ -7,7 +7,7 @@ import { RiDeleteBinFill } from "react-icons/ri";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { formatCurrency } from "../utils";
 
-const API_BASE_URL = "https://backend-toetally.onrender.com/api";
+const API_BASE_URL = "https://toetally-backend-3.onrender.com/api";
 
 const Cart = () => {
   const navigate = useNavigate();
