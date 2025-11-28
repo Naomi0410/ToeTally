@@ -358,7 +358,6 @@ const Shop = () => {
 
           <div className="h-100 md:w-3/4 lg:w-4/5">
             <div className="font-family-2 mb-2 d-flex align-items-center justify-content-between">
-              {/* Accessibility: Headings focusable for navigation */}
               <h1 
                 className="text-xl xl:text-2xl font-bold outline-none" 
                 ref={resultsHeadingRef}
@@ -419,8 +418,6 @@ const Shop = () => {
 
             <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-3 lg:gap-4">
               {loading ? (
-                 // SKELETON LOADER IMPLEMENTATION (Desktop)
-                 // This now uses the correctly initialized productsPerPage
                  Array(productsPerPage)
                   .fill(0)
                   .map((_, index) => <ShopCardSkeletonMedium key={index} />)
@@ -614,6 +611,33 @@ const Shop = () => {
                    role="menuitem"
                   >BALENCIAGA</button>
                </li>
+                <hr className="my-1" />
+               <li role="none" className="mb-2">
+                 <button 
+                   onClick={() => handleBrandClick("Christian Louboutin")}
+                   className="w-full text-left font-family-2 text-sm bg-transparent border-0"
+                   style={{ fontWeight: selectedBrands.includes("Christian Louboutin") ? "bold" : "normal" }}
+                   role="menuitem"
+                  >LOUBOUTIN</button>
+               </li>
+                <hr className="my-1" />
+               <li role="none" className="mb-2">
+                 <button 
+                   onClick={() => handleBrandClick("LOUIS VUITTON")}
+                   className="w-full text-left font-family-2 text-sm bg-transparent border-0"
+                   style={{ fontWeight: selectedBrands.includes("LOUIS VUITTON") ? "bold" : "normal" }}
+                   role="menuitem"
+                  >LOUIS VUITTON</button>
+               </li>
+                <hr className="my-1" />
+               <li role="none" className="mb-2">
+                 <button 
+                   onClick={() => handleBrandClick("Skechers")}
+                   className="w-full text-left font-family-2 text-sm bg-transparent border-0"
+                   style={{ fontWeight: selectedBrands.includes("Skechers") ? "bold" : "normal" }}
+                   role="menuitem"
+                  >SKETCHERS</button>
+               </li>
             </ul>
           )}
         </div>
@@ -674,8 +698,6 @@ const Shop = () => {
         
         <div className="px-3 grid grid-cols-2 gap-2">
           {loading ? (
-             // SKELETON LOADER IMPLEMENTATION (Mobile)
-             // This also uses the corrected productsPerPage
              Array(productsPerPage)
               .fill(0)
               .map((_, index) => <ShopCardSkeletonMobile key={index} />)
@@ -701,23 +723,23 @@ const Shop = () => {
                 </div>
                 <Card.Body className="p-2 flex flex-col">
                   <Card.Text
-                    className="font-family-2 fw-bold text-xs"
-                    style={{ height: "auto", minHeight: "2.5em" }}
+                    className="font-family-2 fw-bold text-sm"
+                    style={{ height: "auto", maxHeight: "0.25rem" }}
                   >
-                    {item.title.length > 10
-                      ? `${item.title.substring(0, 10)}...`
+                    {item.title.length > 12
+                      ? `${item.title.substring(0, 12)}...`
                       : item.title}
                   </Card.Text>
                   <Card.Text
                     className="font-family-2 fw-medium text-xs text-gray-600"
                     style={{ height: "auto", minHeight: "1.5em" }}
                   >
-                    {item.productTag.length > 7
-                      ? `${item.productTag.substring(0, 7)}...`
+                    {item.productTag.length > 9
+                      ? `${item.productTag.substring(0, 9)}...`
                       : item.productTag}{" "}
                     |
-                    {item.color.length > 4
-                      ? `${item.color.substring(0, 4)}...`
+                    {item.color.length > 5
+                      ? `${item.color.substring(0, 5)}...`
                       : item.color}
                   </Card.Text>
                   <hr className="border-2 mt-auto mb-2" />
