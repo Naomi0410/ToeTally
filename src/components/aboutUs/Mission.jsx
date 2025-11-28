@@ -191,7 +191,7 @@ const Mission = () => {
         {/* for small screens */}
         <div className="md:hidden px-3 md:px-0 lg:w-5/6 text-center lg:mx-auto">
           <h1 className="font-family-3 mt-2 text-2xl">Mission</h1>
-          <p className="font-family-2 mt-2 text-xs">
+          <p className="font-family-2 mt-2 text-sm">
             At Toetally, our mission is to provide an unparalleled online
             shopping experience, offering a vast selection of high-quality,
             authentic branded shoes. We strive to deliver exceptional customer

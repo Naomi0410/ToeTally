@@ -4,7 +4,7 @@ const Hero = () => {
   return (
     <>
       <div className="bg-[url('/hero-bg.svg')] text-white bg-cover bg-center flex items-center justify-center h-[200px] md:h-[350px] mx-auto w-full">
-        <div className="flex flex-col gap-2 justify-center items-center container">
+        <div className="flex flex-col gap-2 justify-center items-center ">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-family-3">
             About Us
           </h1>
@@ -42,13 +42,13 @@ const Hero = () => {
           <h1 className="font-medium font-family-3 mx-auto text-2xl">
             Who We Are
           </h1>
-          <p className="font-family-2 mt-2 text-xs">
+          <p className="font-family-2 mt-2 text-sm">
             {" "}
             Welcome to <span className="text-[#01497C]">Toetally</span>, where
             comfort meets style! We are a team that brings the seamless blend
             from diverse brands of everything footwear to you on one platform.
           </p>
-          <p className="font-family-2 mt-2 text-xs">
+          <p className="font-family-2 mt-2 text-sm">
             {" "}
             We know that shoes are more than just an accessory, they’re a
             statement of who you are, that is why we’ve made it our priority to

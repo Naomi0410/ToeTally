@@ -11,7 +11,7 @@ const Blog = () => {
   return (
     <>
       <div
-        className="md:hidden block bg-cover bg-center text-center text-white py-20 px-4 "
+        className="md:hidden flex flex-col text-center justify-center items-center bg-cover bg-center h-[200px] text-white "
         style={{
           backgroundImage: `url(${blogSmHero})`,
         }}
@@ -31,7 +31,7 @@ const Blog = () => {
 
       {/* large screen */}
       <div
-        className="hidden md:block p-24 text-center text-white"
+        className="hidden md:flex flex-col text-center justify-center items-center  h-[350px] text-white"
         style={{
           backgroundImage: `url(${blogBigHero})`,
           backgroundSize: "cover",
