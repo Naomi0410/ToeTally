@@ -1,6 +1,7 @@
 import { ToastContainer, Bounce } from "react-toastify";
 import AppRoutes from "./routes/AppRoutes";
-
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./queryClient";
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
         theme="colored"
         className="text-capitalize"
       />
-      <AppRoutes />
+      <QueryClientProvider client={queryClient}>
+        <AppRoutes />
+      </QueryClientProvider>
     </>
   );
 }

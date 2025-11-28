@@ -1,6 +1,6 @@
 import { Blog, Cart, Checkout, Home, Shop } from "../pages";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import Login from "../components/auth/LogIn";
 import SignUp from "../components/auth/SignUp";
 import AddToCart from "../components/addToCart/AddToCart";
@@ -9,27 +9,17 @@ import AboutUs from "../pages/AboutUs";
 import NotFound from "../pages/NotFound";
 import OrderConfirmation from "../pages/OrderConfirmation";
 import { Loader } from "../components";
+import ScrollToTop from "../components/ScrollToTop";
+
 const RootLayout = lazy(() => import("../layouts/RootLayout"));
 
 export default function AppRoutes() {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const handleLoading = () => {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
-    };
-
-    handleLoading();
-  }, []);
-
   const routes = [
     {
       path: "/",
       element: (
         <Suspense fallback={<Loader />}>
+          <ScrollToTop />
           <RootLayout />
         </Suspense>
       ),
@@ -50,24 +40,10 @@ export default function AppRoutes() {
     },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
-
     { path: "*", element: <NotFound /> },
   ];
 
   const router = createBrowserRouter(routes);
-  return (
-    <div>
-      {loading && <Loader />}
-      <RouterProvider
-        router={router}
-        onNavigate={() => {
-          setLoading(true);
-          setTimeout(() => {
-            setLoading(false);
-          }, 2000);
-          window.scrollTo(0, 0);
-        }}
-      />
-    </div>
-  );
+
+  return <RouterProvider router={router} />;
 }
