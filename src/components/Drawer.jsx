@@ -76,10 +76,10 @@ const Drawer = () => {
   return (
     <>
       <IoIosMenu onClick={handleShow} size="30px" className="cursor-pointer" />
-      <Offcanvas show={show} onHide={handleClose}>
+      <Offcanvas show={show} onHide={handleClose} className="w-75">
         <Offcanvas.Header closeButton></Offcanvas.Header>
         <Offcanvas.Body>
-          <div className="gap-4 flex-column d-flex text-lg font-family-2">
+          <div className="gap-4 flex-column d-flex text-base font-family-2">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
@@ -100,7 +100,7 @@ const Drawer = () => {
                 className="no-underline text-black"
                 onClick={handleClose}
               >
-                <span className="font-family-2 text-xl">Cart</span>
+                <span className="font-family-2 text-base">Cart</span>
               </NavLink>
             )}
           </div>
@@ -109,14 +109,14 @@ const Drawer = () => {
             <>
               <div className="d-flex align-items-center gap-2 mt-2">
                 <span
-                  className="text-navIcon font-family-2 text-lg bg-[#E3F5F6] rounded-5 p-3"
+                  className="text-navIcon font-family-2 text-base bg-[#E3F5F6] rounded-5 p-3"
                   style={{ color: "#147C84" }}
                 >
                   {user.user.firstName.charAt(0).toUpperCase()}
                   {user.user.lastName.charAt(0).toUpperCase()}
                 </span>
                 <div className="d-flex flex-column">
-                  <span className="font-family-2 text-xl">
+                  <span className="font-family-2 text-sm">
                     {user.user.firstName.charAt(0).toUpperCase() +
                       user.user.firstName.slice(1).toLowerCase()}{" "}
                     {user.user.lastName.charAt(0).toUpperCase() +
@@ -141,7 +141,7 @@ const Drawer = () => {
                   style={{ backgroundColor: "#FCF0EF" }}
                   className="rounded-5 p-3"
                 />
-                <span className="font-family-2 text-lg text-[red]">Logout</span>
+                <span className="font-family-2 text-sm text-[red]">Logout</span>
               </div>
             </>
           )}
@@ -149,13 +149,13 @@ const Drawer = () => {
             <div className="d-flex flex-column gap-2">
               <Link
                 to="/login"
-                className="no-underline text-black font-family-2 text-xl"
+                className="no-underline text-black font-family-2 text-lg"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="no-underline text-black font-family-2 text-xl"
+                className="no-underline text-black font-family-2 text-lg"
               >
                 Sign up
               </Link>

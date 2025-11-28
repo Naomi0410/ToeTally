@@ -41,7 +41,7 @@ const Trending = () => {
 
   return (
     <div className="overflow-hidden relative w-full">
-      <h1 className="lg:px-16 md:px-3 mb-4 xl:text-5xl md:text-4xl text-black xl:mt-24 md:mt-16 font-family-3 d-none d-md-block">
+      <h1 className="lg:px-12 md:px-3 mb-4 md:text-3xl lg:text-4xl xl:text-5xl text-black md:mt-12 lg:mt-18 xl:mt-20 font-family-3 hidden md:block">
         TRENDING
       </h1>
       <div
@@ -53,14 +53,14 @@ const Trending = () => {
             <img
               src={slide.src}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full md:h-full lg:h-[550px] xl:h-[650px] object-cover"
             />
             <div className="absolute xl:bottom-10 bottom-5 xl:left-5 lg:left-2 p-4 text-white z-10 flex flex-col">
-              <span className="font-family-2 text-lg md:text-xl lg:text-xl xl:text-3xl font-normal">{slide.title}</span>
-              <span className="font-family-2 text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold">{slide.subtitle}</span>
+              <span className="font-family-2 md:text-sm  lg:text-base xl:text-xl font-normal">{slide.title}</span>
+              <span className="font-family-2  md:text-lg lg:text-xl xl:text-2xl  font-bold">{slide.subtitle}</span>
               <ActionButton
                 variant="none"
-                size="lg"
+                size="md"
                 text="Shop Now"
                 onClick={() => {
                   navigate("/shop");
@@ -76,7 +76,7 @@ const Trending = () => {
                   color: "#01497C",
                   border: "1px solid #01497C",
                 }}
-                className="font-family-2 rounded-2 w-48 p-2 mt-2"
+                className="font-family-2 rounded-2 md:w-32 lg:w-36 xl:w-40 px-2 md:py-1 lg:py-2 mt-2"
               />
             </div>
           </div>
@@ -95,8 +95,8 @@ const Trending = () => {
               className="w-full h-full object-cover"
             />
             <div className="absolute flex flex-column bottom-5 left-5 p-2 text-white z-10">
-              <span className="font-family-2 text-base font-normal">{slide.title}</span>
-              <span className="font-family-2 text-xl font-bold">{slide.subtitle}</span>
+              <span className="font-family-2 text-sm font-normal">{slide.title}</span>
+              <span className="font-family-2 text-lg font-bold">{slide.subtitle}</span>
               <ActionButton
                 variant="none"
                 size="md"
@@ -115,7 +115,7 @@ const Trending = () => {
                   color: "#01497C",
                   border: "1px solid #01497C",
                 }}
-                className="font-family-2 rounded-3 w-32 p-1 mt-2"
+                className="font-family-2 rounded-2 w-28 p-1 mt-1"
               />
             </div>
           </div>

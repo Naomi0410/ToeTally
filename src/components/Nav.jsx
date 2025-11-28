@@ -20,8 +20,7 @@ const Nav = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
 
-
-
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -82,16 +81,16 @@ const Nav = () => {
   return (
     <>
       <header className="border-b-2 d-none d-md-block">
-        <div className="d-flex justify-content-between align-items-center md:px-3 lg:px-16 py-4 ">
+        <div className="flex justify-between items-center md:px-3 lg:px-12 py-4">
           <NavLink to="/" className="no-underline">
             <div className="d-flex align-items-center gap-2">
               <Image src={logo} />
-              <span className="font-family-1 text-black font-bold text-xl">
+              <span className="font-family-1 text-black font-bold text-base">
                 TOETALLY
               </span>
             </div>
           </NavLink>
-          <div className="d-flex gap-4 align-items-center text-sm font-family-2">
+          <div className="flex md:gap-3 lg:gap-6 items-center md:text-xs lg:text-sm font-family-2">
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
@@ -128,14 +127,14 @@ const Nav = () => {
                       style={{ pointerEvents: "none", cursor: "default" }}
                     >
                       <span
-                        className="text-navIcon font-family-2 text-2xl bg-[#E3F5F6] rounded-5 p-3"
+                        className="text-navIcon font-family-2 text-lg bg-[#E3F5F6] rounded-5 p-3"
                         style={{ color: "#147C84" }}
                       >
                         {user.user.firstName.charAt(0).toUpperCase()}
                         {user.user.lastName.charAt(0).toUpperCase()}
                       </span>
                       <div className="d-flex flex-column">
-                        <span className="font-family-2 text-xl">
+                        <span className="font-family-2 text-lg">
                           {user.user.firstName.charAt(0).toUpperCase() +
                             user.user.firstName.slice(1).toLowerCase()}{" "}
                           {user.user.lastName.charAt(0).toUpperCase() +
@@ -157,7 +156,7 @@ const Nav = () => {
                         style={{ backgroundColor: "#FCF0EF" }}
                         className="rounded-5 p-3"
                       />
-                      <span className="font-family-2 text-xl text-[red]">
+                      <span className="font-family-2 text-lg text-[red]">
                         Logout
                       </span>
                     </Dropdown.Item>
@@ -210,7 +209,7 @@ const Nav = () => {
                 <NavLink to="/login">
                   <ActionButton
                     variant="none"
-                    size="md"
+                    size="sm"
                     text="Login"
                     style={{
                       backgroundColor: "white",
@@ -228,7 +227,7 @@ const Nav = () => {
                 <NavLink to="/signup">
                   <ActionButton
                     variant="none"
-                    size="md"
+                    size="sm"
                     text="Sign Up"
                     style={{
                       backgroundColor: "#01497C",
@@ -241,7 +240,7 @@ const Nav = () => {
                       color: "#01497C",
                       border: "1px solid #01497C",
                     }}
-                    className="font-family-2 rounded-3 p-2 w-32"
+                    className="font-family-2 rounded-3 p-2 w-20"
                   />
                 </NavLink>
               </>
@@ -256,7 +255,7 @@ const Nav = () => {
           <NavLink to="/" className="no-underline">
             <div className="d-flex align-items-center gap-2">
               <Image src={logo} />
-              <span className="font-family-1 text-black font-bold text-base">
+              <span className="font-family-1 text-black font-bold text-sm">
                 TOETALLY
               </span>
             </div>

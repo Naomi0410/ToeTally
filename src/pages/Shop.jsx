@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ActionButton, Discount, Subscribe } from "../components";
-import { Card, Col, Row, Spinner } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { formatCurrency } from "../utils";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { motion } from "framer-motion";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -14,11 +15,29 @@ const Shop = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(6);
   const [displayedBrand, setDisplayedBrand] = useState("All");
   const [sortBy, setSortBy] = useState("All");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showBrandDropdown, setShowBrandDropdown] = useState(false);
+  const [productsPerPage, setProductsPerPage] = useState(8);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 1280) {
+        setProductsPerPage(10);
+      } else if (width >= 1024) {
+        setProductsPerPage(8);
+      } else if (width >= 768) {
+        setProductsPerPage(6);
+      } else {
+        setProductsPerPage(6);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -46,9 +65,11 @@ const Shop = () => {
     if (brand === "All") {
       setFilteredProducts(products);
       setDisplayedBrand("All");
-      setSelectedBrands([]); 
+      setSelectedBrands([]);
     } else {
-      const filteredProducts = products.filter((product) => product.productTag === brand);
+      const filteredProducts = products.filter(
+        (product) => product.productTag === brand
+      );
       setFilteredProducts(filteredProducts);
       setDisplayedBrand(brand);
       setSelectedBrands([brand]);
@@ -56,12 +77,10 @@ const Shop = () => {
     setCurrentPage(1);
     if (window.innerWidth < 992) {
       setShowBrandDropdown(false);
-    }  
+    }
   };
-  
 
-
- const handleSortByChange = (newSortBy) => {
+  const handleSortByChange = (newSortBy) => {
     setSortBy(newSortBy);
     setCurrentPage(1);
     let filteredProducts;
@@ -99,7 +118,7 @@ const Shop = () => {
       console.error("Product ID is missing!");
       return;
     }
-    navigate(`/addtocart/${productId}`); // Navigate with product ID
+    navigate(`/addtocart/${productId}`);
   };
 
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -116,23 +135,46 @@ const Shop = () => {
 
   return (
     <div>
-      <div style={{ backgroundColor: "#EBEBEB" }}>
-        <div className="px-16 py-3 lg:flex gap-3 hidden mb-5">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ backgroundColor: "#EBEBEB" }}
+      >
+        <div className="px-12 lg:py-2 xl:py-3 lg:flex gap-3 hidden mb-5">
           <Link
             to="/"
-            className="text-customLightGray font-semibold text-xl font-family-2 no-underline"
+            className="text-customLightGray font-semibold text-base font-family-2 no-underline  hover:text-gray-600 transition-colors"
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-xl">
+          <span className="font-semibold text-customLightGray font-family-1 text-base">
             /
           </span>
-          <span className="font-semibold font-family-2 text-xl">Shop Now</span>
+          <span className="font-semibold font-family-2 text-base text-black">
+            Shop Now
+          </span>
         </div>
-      </div>
-      <div className="lg:px-20 md:px-8 md:mt-10">
-        <Row className="h-100 d-none d-lg-flex">
-          <Col xl={2} lg={3} className="border-2 py-16 px-3 rounded-3 h-100">
+
+        <div className="px-3 py-2 flex gap-2 lg:hidden mb-3">
+          <Link
+            to="/"
+            className="text-customLightGray font-semibold text-xs font-family-2 no-underline  hover:text-gray-600 transition-colors"
+          >
+            Home
+          </Link>
+          <span className="font-semibold text-customLightGray font-family-1 text-xs">
+            /
+          </span>
+          <span className="font-semibold font-family-2 text-xs text-black">
+            Shop Now
+          </span>
+        </div>
+      </motion.div>
+
+      <div className="lg:px-12 md:px-4">
+        <div className="h-100 hidden md:flex gap-6">
+          <div className="border-2 py-12 px-3 rounded-3 h-100 md:w-1/4 lg:w-1/5">
             <p className="text-[#2C6892] text-xl font-family-2 font-medium">
               Filters
             </p>
@@ -254,11 +296,11 @@ const Shop = () => {
               onClick={() => handleBrandClick("Skechers")}
               className="font-family-2 rounded-2 w-100 text-start font-medium"
             />
+          </div>
 
-          </Col>
-          <Col xl={10} lg={9} className="h-100">
-            <div className="font-family-2 mb-8 d-flex align-items-center justify-content-between">
-              <h1>
+          <div className="h-100 md:w-3/4 lg:w-4/5">
+            <div className="font-family-2 mb-2 d-flex align-items-center justify-content-between">
+              <h1 className="text-xl xl:text-2xl font-bold">
                 {" "}
                 {displayedBrand === "All"
                   ? "All"
@@ -266,7 +308,7 @@ const Shop = () => {
                     displayedBrand.slice(1).toLowerCase()}
               </h1>
 
-              <div className="font-family-2 d-flex gap-2 align-items-center">
+              <div className="font-family-2 flex gap-2 items-center">
                 <span>
                   {indexOfFirstProduct + 1} -{" "}
                   {Math.min(indexOfLastProduct, filteredProducts.length)} of{" "}
@@ -322,80 +364,73 @@ const Shop = () => {
             {loading && <Spinner animation="border" />}
             {error && <p className="text-danger">{error}</p>}
             {!loading && !error && (
-              <div className="grid lg:grid-cols-3 md:grid-cols-2 md:gap-10 lg:gap-4 xl:gap-10 justify-content-between">
+              <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-3 lg:gap-4">
                 {currentProducts.length === 0 ? (
                   <p>No products found for the selected brand.</p>
                 ) : (
                   currentProducts.map((item) => (
-                    <Card
+                    <div
                       key={item._id || item.id}
-                      className="flex-shrink-0 border-0 hover-brightness card"
+                      className="flex-shrink-0 border-0 transition-all hover:brightness-110"
                       style={{
                         backgroundColor: "#B5B5B51A",
                       }}
                     >
-                      <div style={{ width: "auto" }}>
-                        <Card.Img
-                          variant="top"
+                      <div className="w-auto">
+                        <img
                           src={item.thumbnail}
-                          className="object-fit-contain p-2"
-                          style={{ height: "15vw" }}
+                          alt={item.title}
+                          className="w-full h-full object-contain p-2"
+                          style={{ height: "7rem" }}
                         />
                       </div>
-                      <Card.Body>
-                        <Card.Text
-                          className="font-family-2 fw-bold xl:text-xl lg:text-base"
-                          style={{ height: "0.75rem" }}
+                      <div className="px-3">
+                        <p
+                          className="font-bold text-base mb-2"
+                          style={{ height: "0.5rem" }}
                         >
-                          {item.title.length > 15
-                            ? `${item.title.substring(0, 15)}...`
+                          {item.title.length > 10
+                            ? `${item.title.substring(0, 10)}...`
                             : item.title}
-                        </Card.Text>
-                        <Card.Text
-                          className="font-family-2 fw-medium xl:text-lg lg:text-sm"
+                        </p>
+                        <p
+                          className="font-medium text-sm mb-2"
                           style={{ height: "1.5rem" }}
                         >
-                          {item.productTag.length > 15
-                            ? `${item.productTag.substring(0, 15)}...`
+                          {item.productTag.length > 6
+                            ? `${item.productTag.substring(0, 6)}...`
                             : item.productTag}{" "}
-                          | {item.color}
-                        </Card.Text>
-                        <hr className="border-2" />
-                        <div className="d-flex justify-content-between align-items-center">
-                          <Card.Text className="font-family-2 fw-bold xl:text-xl lg:text-sm mb-0">
+                          |{" "}
+                          {item.color.length > 6
+                            ? `${item.color.substring(0, 6)}...`
+                            : item.color}
+                        </p>
+                        <hr className="border-t-2 my-2" />
+                        <div className="flex justify-between items-center mb-3">
+                          <p className="font-bold text-xs mb-0">
                             {formatCurrency(item.price)}
-                          </Card.Text>
+                          </p>
                           <button
-                            className="font-family-2 rounded-1 py-2 xl:px-4 lg:px-3 md:px-4 xl:text-lg lg:text-xs"
+                            className="rounded py-2 px-2 xl:text-sm md:text-xs transition-all hover:bg-white hover:text-black hover:border hover:border-black"
                             style={{
                               backgroundColor: "#01497C",
                               color: "white",
-                            }}
-                            onMouseOver={(e) => {
-                              e.target.style.backgroundColor = "white";
-                              e.target.style.color = "black";
-                              e.target.style.border = "1px solid black";
-                            }}
-                            onMouseOut={(e) => {
-                              e.target.style.backgroundColor = "#01497C";
-                              e.target.style.color = "white";
-                              e.target.style.border = "";
                             }}
                             onClick={() => handleClick(item._id || item.id)}
                           >
                             Buy Now
                           </button>
                         </div>
-                      </Card.Body>
-                    </Card>
+                      </div>
+                    </div>
                   ))
                 )}
               </div>
             )}
-            <div className="pagination d-flex justify-content-center align-items-center gap-5 mt-3">
+            <div className="pagination d-flex justify-content-center align-items-center gap-4 mt-3">
               {currentPage > 1 && (
                 <button
-                  className="pagination-button font-family-2"
+                  className="pagination-button font-family-2 font-bold text-sm"
                   onClick={() => paginate(currentPage - 1)}
                 >
                   Prev
@@ -413,9 +448,9 @@ const Shop = () => {
                   return (
                     <button
                       key={pageNumber}
-                      className={`pagination-button font-family-2 ${
+                      className={`pagination-button font-family-2 text-base ${
                         currentPage === pageNumber
-                          ? "active bg-[#01497C] text-white p-3 rounded-5"
+                          ? "active bg-[#01497C] text-white px-3 py-2 rounded-5 text-sm font-semibold"
                           : ""
                       }`}
                       onClick={() => paginate(pageNumber)}
@@ -427,20 +462,20 @@ const Shop = () => {
               {currentPage <
                 Math.ceil(filteredProducts.length / productsPerPage) && (
                 <button
-                  className="pagination-button font-family-2"
+                  className="pagination-button font-family-2 font-bold text-sm"
                   onClick={() => paginate(currentPage + 1)}
                 >
                   Next
                 </button>
               )}
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center px-3 d-lg-none">
+      <div className="flex justify-between items-center px-3 md:hidden">
         <div style={{ position: "relative" }}>
-          <span className="font-family-2 text-sm d-flex">
+          <span className="font-family-2 text-base font-bold flex">
             {" "}
             {displayedBrand === "All"
               ? "All"
@@ -640,85 +675,127 @@ const Shop = () => {
           )}
         </span>
       </div>
-      <div className="d-lg-none d-block">
-      {loading && <Spinner animation="border" />}
-      {error && <p className="text-danger">{error}</p>}
-      {!loading && !error && (
-        <div className="px-3 grid grid-cols-2 lg:hidden gap-3">
-          {currentProducts.length === 0 ? (
-            <p>No products found for the selected brand.</p>
-          ) : (
-            currentProducts.map((item) => (
-              <Card
-                key={item._id || item.id}
-                className="border-0 pb-2 hover-brightness card"
-                style={{
-                  backgroundColor: "#B5B5B51A",
-                  width: "45vw",
-                }}
-              >
-                <div style={{ width: "auto" }}>
-                  <Card.Img
-                    variant="top"
-                    src={item.thumbnail}
-                    className="object-fit-contain p-2"
-                    style={{ height: "8rem" }}
-                  />
-                </div>
-                <Card.Body>
-                  <Card.Text
-                    className="font-family-2 fw-bold text-xs"
-                    style={{ height: "1rem" }}
-                  >
-                    {item.title.length > 15
-                      ? `${item.title.substring(0, 15)}...`
-                      : item.title}
-                  </Card.Text>
-                  <Card.Text
-                    className="font-family-2 fw-medium text-xs"
-                    style={{ height: "1rem" }}
-                  >
-                    {item.productTag} | {item.color}
-                  </Card.Text>
-                  <hr className="border-2" />
-                  <div className="d-flex justify-content-between align-items-center">
-                    <Card.Text className="font-family-2 fw-bold text-xs mb-0">
-                      {formatCurrency(item.price)}
-                    </Card.Text>
-                    <button
-                      className="font-family-2 rounded-1 py-1 px-1 text-xs"
-                      style={{
-                        backgroundColor: "#01497C",
-                        color: "white",
-                      }}
-                      onMouseOver={(e) => {
-                        e.target.style.backgroundColor = "white";
-                        e.target.style.color = "black";
-                        e.target.style.border = "1px solid black";
-                      }}
-                      onMouseOut={(e) => {
-                        e.target.style.backgroundColor = "#01497C";
-                        e.target.style.color = "white";
-                        e.target.style.border = "";
-                      }}
-                      onClick={() => handleClick(item._id || item.id)}
-                    >
-                      Buy Now
-                    </button>
+      <div className="md:hidden block">
+        {loading && <Spinner animation="border" />}
+        {error && <p className="text-danger">{error}</p>}
+        {!loading && !error && (
+          <div className="px-3 grid grid-cols-2 gap-2">
+            {currentProducts.length === 0 ? (
+              <p>No products found for the selected brand.</p>
+            ) : (
+              currentProducts.map((item) => (
+                <Card
+                  key={item._id || item.id}
+                  className="border-0 pb-2 hover-brightness card"
+                  style={{
+                    backgroundColor: "#B5B5B51A",
+                  }}
+                >
+                  <div style={{ width: "auto" }}>
+                    <Card.Img
+                      variant="top"
+                      src={item.thumbnail}
+                      className="object-fit-contain p-2"
+                      style={{ height: "7rem" }}
+                    />
                   </div>
-                </Card.Body>
-              </Card>
-            ))
+                  <Card.Body>
+                    <Card.Text
+                      className="font-family-2 fw-bold text-xs"
+                      style={{ height: "0" }}
+                    >
+                      {item.title.length > 10
+                        ? `${item.title.substring(0, 10)}...`
+                        : item.title}
+                    </Card.Text>
+                    <Card.Text
+                      className="font-family-2 fw-medium text-xs"
+                      style={{ height: "0.75rem" }}
+                    >
+                      {item.productTag.length > 7
+                        ? `${item.productTag.substring(0, 7)}...`
+                        : item.productTag}{" "}
+                      |
+                      {item.color.length > 4
+                        ? `${item.color.substring(0, 4)}...`
+                        : item.color}
+                    </Card.Text>
+                    <hr className="border-2" />
+                    <div className="flex justify-between items-center">
+                      <Card.Text className="font-family-2 fw-bold text-xs mb-0">
+                        {formatCurrency(item.price)}
+                      </Card.Text>
+                      <button
+                        className="font-family-2 rounded-1 py-1 px-1 text-xs"
+                        style={{
+                          backgroundColor: "#01497C",
+                          color: "white",
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.backgroundColor = "white";
+                          e.target.style.color = "black";
+                          e.target.style.border = "1px solid black";
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.backgroundColor = "#01497C";
+                          e.target.style.color = "white";
+                          e.target.style.border = "";
+                        }}
+                        onClick={() => handleClick(item._id || item.id)}
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              ))
+            )}
+          </div>
+        )}
+        <div className="pagination flex justify-center items-center gap-3 mt-3">
+          {currentPage > 1 && (
+            <button
+              className="pagination-button font-family-2 text-sm font-bold"
+              onClick={() => paginate(currentPage - 1)}
+            >
+              Prev
+            </button>
+          )}
+          {Array(
+            Math.min(3, Math.ceil(filteredProducts.length / productsPerPage))
+          )
+            .fill()
+            .map((_, index) => {
+              const pageNumber = Math.max(1, currentPage - 2) + index;
+              return (
+                <button
+                  key={pageNumber}
+                  className={`pagination-button font-family-2 text-sm ${
+                    currentPage === pageNumber
+                      ? "active bg-[#01497C] text-white px-2 py-1 rounded-5 text-xs font-semibold"
+                      : ""
+                  }`}
+                  onClick={() => paginate(pageNumber)}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+          {currentPage <
+            Math.ceil(filteredProducts.length / productsPerPage) && (
+            <button
+              className="pagination-button font-family-2 text-sm font-bold"
+              onClick={() => paginate(currentPage + 1)}
+            >
+              Next
+            </button>
           )}
         </div>
-      )}
       </div>
       <Discount />
       <div className="mx-auto lg:w-11/12">
-        
-        <Subscribe/>
-  
-        </div>
+        <Subscribe />
+      </div>
     </div>
   );
 };

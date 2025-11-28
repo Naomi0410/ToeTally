@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -37,7 +37,7 @@ const Login = () => {
         setShowModal(true);
         setAlertMessage("Login successful! Redirecting...");
         setAlertType("success");
-        reset(); // Clear the form after successful login
+        reset(); 
       } else {
         setAlertMessage(responseData.message || "Invalid credentials. Please try again.");
         setAlertType("error");
@@ -54,10 +54,10 @@ const Login = () => {
     <>
       
 
-      <div className="flex flex-col lg:flex-row lg:h-[900px] 2xl:h-screen">
+      <div className="flex items-center flex-col lg:flex-row mx-auto 2xl:container">
    
         {/* Left Image Section */}
-        <div className="lg:w-[55%] h-full hidden lg:block relative">
+        <div className="lg:w-[50%] h-[100vh] hidden lg:block relative">
         {alertMessage && <Alert message={alertMessage} type={alertType} onClose={() => setAlertMessage(null)} />}
           <img src="/auth.svg" alt="login image" className="w-full h-full object-cover" />
           <div className="flex justify-center">
@@ -66,15 +66,15 @@ const Login = () => {
         </div>
 
         {/* Login Form Section */}
-        <div className="lg:w-[45%] py-12 lg:py-0 flex flex-col justify-center items-center md:px-8">
+        <div className="lg:w-[45%] w-full py-12 lg:py-0 flex flex-col justify-center items-center md:px-8">
           <div className="w-5/6 2xl:w-4/6 font-font-family-2">
-            <Link to="/" className="flex justify-center gap-2 items-center link-container text-black no-underline">
-              <img src="/logo.svg" alt="logo" className="w-16 h-16" />
-              <h1 className="font-font-family-1 text-2xl font-bold mt-2">TOETALLY</h1>
+            <Link to="/" className="flex justify-center gap-1 items-center link-container text-black no-underline">
+              <img src="/logo.svg" alt="logo" className="w-16 h-8" />
+              <h1 className="font-font-family-1 text-xl font-bold">TOETALLY</h1>
             </Link>
 
-            <div className="mt-2 link-container">
-              <p className="text-gray-600 text-lg text-align-custom font-semibold font-font-family-2">
+            <div className="mt-0 link-container">
+              <p className="text-gray-600 text-base text-align-custom font-semibold font-font-family-2">
                 Enter your email to join us or sign in
               </p>
             </div>
@@ -114,15 +114,6 @@ const Login = () => {
                 </span>
               </div>
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
-
-              {/* Terms and Conditions
-              <p className="text-[#9F9F9F] font-[400] text-start mt-3">
-                By continuing, I agree to Toetally’s{" "}
-                <a className="hover:underline text-[#9F9F9F] decoration-inherit" href="#">
-                  Privacy Policy and Terms of Use.
-                </a>
-              </p> */}
-
               {/* Submit Button */}
               <button
                 type="submit"

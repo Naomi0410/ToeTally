@@ -1,19 +1,17 @@
-import { Col, Form, Row, Button } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState, useEffect, useCallback } from "react";
 import { formatCurrency, validateFields } from "../utils";
 import { Subscribe } from "../components";
 import Alert from "../components/alert/Alert";
+import { motion } from "framer-motion";
+
 const API_BASE_URL = "https://backend-toetally-1.onrender.com/api";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register } = useForm();
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({ name: "", email: "" });
@@ -119,60 +117,63 @@ const Checkout = () => {
           onClose={() => setAlert(null)}
         />
       )}
-      <div style={{ backgroundColor: "#EBEBEB" }} className="">
-        <div className="px-16 py-3 lg:flex gap-3 hidden">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{ backgroundColor: "#EBEBEB" }}
+      >
+        <div className="px-12 lg:py-2 xl:py-3 lg:flex gap-3 hidden">
           <Link
             to="/"
-            className="text-customLightGray font-semibold lg:text-xl font-family-2 no-underline"
+            className="text-customLightGray font-semibold text-base font-family-2 no-underline hover:text-gray-600 transition-colors"
           >
             Home
           </Link>
-          <span className="font-semibold font-family-1 lg:text-xl text-customLightGray">
+          <span className="font-semibold text-customLightGray font-family-1 text-base">
             /
           </span>
           <Link
             to="/cart"
-            className="font-semibold font-family-2 lg:text-xl text-customLightGray no-underline"
+            className="text-customLightGray font-semibold text-base font-family-2 no-underline hover:text-gray-600 transition-colors"
           >
             Cart
           </Link>
-          <span className="font-semibold font-family-1 lg:text-xl text-customLightGray">
+          <span className="font-semibold text-customLightGray font-family-1 text-base">
             /
           </span>
-          <span className="font-semibold font-family-2 lg:text-xl">
+          <span className="font-semibold font-family-2 text-base text-black">
             Checkout
           </span>
         </div>
-
-        <div className="px-3 block lg:hidden py-2 flex gap-2 ">
+        <div className="px-3 py-2 flex gap-2 lg:hidden">
           <Link
             to="/"
-            className="text-customLightGray font-semibold text-sm font-family-2 no-underline"
+            className="text-customLightGray font-semibold text-xs font-family-2 no-underline hover:text-gray-600 transition-colors"
           >
             Home
           </Link>
-          <span className="font-semibold font-family-1 text-sm text-customLightGray">
+          <span className="font-semibold text-customLightGray font-family-1 text-xs">
             /
           </span>
           <Link
             to="/cart"
-            className="font-semibold font-family-2 text-sm text-customLightGray no-underline"
+            className="text-customLightGray font-semibold text-xs font-family-2 no-underline hover:text-gray-600 transition-colors"
           >
             Cart
           </Link>
-          <span className="font-semibold font-family-1 text-sm text-customLightGray">
+          <span className="font-semibold text-customLightGray font-family-1 text-xs">
             /
           </span>
-          <span className="font-semibold font-family-2 text-sm">
-            Checkout
-          </span>
+          <span className="font-semibold font-family-2 text-xs">Checkout</span>
         </div>
-      </div>
+      </motion.div>
 
-      <Row className="py-4 md:w-full lg:w-11/12 flex flex-col lg:flex-row lg:justify-between mx-auto">
+      {/* large screens */}
+      <Row className="py-4 px-12 d-none d-lg-flex justify-between ">
         {/* Billing Details - Visible on all screens */}
         <Col xs={12} lg={6} className="mt-4">
-          <h1 className="font-family-3 text-3xl lg:text-5xl text-black">
+          <h1 className="font-family-3 text-3xl lg:text-4xl xl:text-5xl text-black">
             Billing Details
           </h1>
           <Form className="mt-4">
@@ -280,7 +281,133 @@ const Checkout = () => {
                 <span className="ms-auto">
                   <span className="text-[#808080] inline">
                     (Regular Shipping)
-                  </span> {" "}
+                  </span>{" "}
+                  {formatCurrency(5000)}
+                </span>
+              </div>
+
+              <hr />
+              <div className="d-flex justify-content-between text-lg font-bold font-family-2">
+                <p>Total</p>
+                <p>{formatCurrency(totalPrice + 5000)}</p>
+              </div>
+            </>
+          )}
+        </Col>
+      </Row>
+
+      {/* medium and small screens */}
+      <Row className="py-2 d-lg-none px-3 flex flex-col ">
+        {/* Billing Details - Visible on all screens */}
+        <Col xs={12} className="mt-4">
+          <h1 className="font-family-3 text-2xl md:text-3xl text-black">
+            Billing Details
+          </h1>
+          <Form className="mt-3">
+            <div className="d-flex gap-3">
+              <Form.Control
+                {...register("firstName", validateFields.name)}
+                placeholder="First Name"
+                type="text"
+                size="md"
+                className="font-family-2 ps-3"
+                defaultValue={userData.firstName}
+              />
+              <Form.Control
+                {...register("lastName", validateFields.name)}
+                placeholder="Last Name"
+                type="text"
+                size="md"
+                className="font-family-2 ps-3"
+                defaultValue={userData.lastName}
+              />
+            </div>
+            <Form.Control
+              {...register("email", validateFields.email)}
+              placeholder="Email Address"
+              type="text"
+              size="md"
+              className="font-family-2 ps-3 mt-3"
+              defaultValue={userData.email}
+            />
+            <Form.Control
+              {...register("country", validateFields.country)}
+              placeholder="Country/region"
+              type="text"
+              size="md"
+              className="font-family-2 ps-3 mt-3"
+            />
+            <Form.Control
+              {...register("address", validateFields.address)}
+              placeholder="Street Address"
+              type="text"
+              size="md"
+              className="font-family-2 ps-3 mt-3"
+            />
+            <Form.Control
+              {...register("city", validateFields.city)}
+              placeholder="Town/city"
+              type="text"
+              size="md"
+              className="font-family-2 ps-3 mt-3"
+            />
+            <Form.Control
+              {...register("state", validateFields.state)}
+              placeholder="State"
+              type="text"
+              size="md"
+              className="font-family-2 ps-3 mt-3"
+            />
+            <Form.Control
+              {...register("phone", validateFields.phone)}
+              placeholder="Phone"
+              type="text"
+              size="md"
+              className="font-family-2 ps-3 mt-3"
+            />
+          </Form>
+        </Col>
+        {/* Order Summary - Visible on all screens */}
+        <Col xs={12} className="mt-5">
+          <h1 className="font-family-3 text-3xl lg:text-4xl text-black">
+            Your Order
+          </h1>
+          <hr />
+          {loading ? (
+            <p>Loading cart items...</p>
+          ) : cartData.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <>
+              <div className="d-flex justify-content-between font-family-2 font-bold">
+                <p>Product</p>
+                <p>SubTotal</p>
+              </div>
+              {cartData.map((item) => (
+                <div
+                  key={item.product?._id || Math.random()}
+                  className="d-flex justify-content-between font-family-2"
+                >
+                  <p className="text-[#808080]">
+                    {item.product?.title || "Unnamed Product"} x{item.quantity}
+                  </p>
+                  <p className="font-bold">
+                    {formatCurrency(item.product?.price * item.quantity)}
+                  </p>
+                </div>
+              ))}
+
+              <hr />
+              <div className="d-flex justify-content-between font-family-2 font-normal">
+                <p className="font-bold">Subtotal</p>
+                <p>{formatCurrency(totalPrice)}</p>
+              </div>
+              <div className="d-flex font-family-2 font-normal">
+                <p className="font-bold">Shipping</p>
+                <span className="ms-auto">
+                  <span className="text-[#808080] inline">
+                    (Regular Shipping)
+                  </span>{" "}
                   {formatCurrency(5000)}
                 </span>
               </div>
@@ -306,7 +433,7 @@ const Checkout = () => {
               </label>
             </div>
 
-            <p className="py-3 px-3 font-family-2">
+            <p className="py-3 px-3 text-sm lg:text-base font-family-2">
               Make your payment into our bank account. Please use your Order ID
               as the payment reference. Your order will not be shipped until the
               funds have cleared in our account.

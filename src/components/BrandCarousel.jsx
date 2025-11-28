@@ -13,19 +13,19 @@ import {
 } from "../assets";
 
 const brandLogos = [
-  { src: nike, size: "lg:w-28 md:w-14 w-8" },
-  { src: fila, size: "lg:w-28 md:w-14 w-8" },
-  { src: reebok, size: "lg:w-28 md:w-14 w-8" },
-  { src: ballenciaga, size: "lg:w-40 md:w-32 w-14" },
-  { src: champion, size: "lg:w-40 md:w-32 w-14" },
-  { src: vans, size: "lg:w-28 md:w-14 w-8" },
-  { src: newBalance, size: "lg:w-28 md:w-14 w-8" },
-  { src: gap, size: "lg:w-28 md:w-14 w-8" },
-  { src: adidas, size: "lg:w-28 md:w-14 w-8" },
+  { src: nike, size: "lg:w-14 md:w-10 w-8" },
+  { src: fila, size: "lg:w-14 md:w-10 w-8" },
+  { src: reebok, size: "lg:w-14 md:w-10 w-8" },
+  { src: ballenciaga, size: "lg:w-24 md:w-16 w-14" },
+  { src: champion, size: "lg:w-24 md:w-16 w-14" },
+  { src: vans, size: "lg:w-14 md:w-10 w-8" },
+  { src: newBalance, size: "lg:w-14 md:w-10 w-8" },
+  { src: gap, size: "lg:w-14 md:w-10 w-8" },
+  { src: adidas, size: "lg:w-14 md:w-10 w-8" },
 ];
 
 // Duplicate the array for seamless looping
-const duplicatedLogos = [...brandLogos, ...brandLogos, ...brandLogos];
+const duplicatedLogos = [...brandLogos, ...brandLogos, ...brandLogos, ...brandLogos];
 
 const BrandCarousel = () => {
   return (

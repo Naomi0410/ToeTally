@@ -75,6 +75,7 @@ import louboutin3 from "./louboutin/Astroloubi.svg";
 import louboutin4 from "./louboutin/Chambeliss.svg";
 import louboutin5 from "./louboutin/Louis Junior Spikes.svg";
 import louboutin6 from "./louboutin/Trailnrun.svg";
+import gif from "./7011b79616e9a6426e45a3c88c397b2a4cdc2e7f.gif"
 
 export {
   adidas1,
@@ -154,4 +155,5 @@ export {
   blog5,
   blogBigHero,
   blogSmHero,
+  gif
 };
