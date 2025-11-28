@@ -1,4 +1,4 @@
-import { Card, Spinner } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { formatCurrency } from "../utils";
 import ActionButton from "./ActionButton";
@@ -6,6 +6,10 @@ import { discountBadge } from "../assets";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  ProductCardSkeletonLarge,
+  ProductCardSkeletonSmall,
+} from "./ProductSkeletons";
 
 const Discount = () => {
   const navigate = useNavigate();
@@ -37,8 +41,12 @@ const Discount = () => {
   return (
     <>
       {/* Large screen */}
-      <div className="mt-20 hidden lg:block pl-12">
-        <motion.h1 
+      <section
+        className="mt-20 hidden lg:block pl-12"
+        aria-labelledby="discount-heading"
+      >
+        <motion.h1
+          id="discount-heading"
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -48,8 +56,17 @@ const Discount = () => {
           DISCOUNT OFFERS
         </motion.h1>
         <div className="mt-4 flex gap-8 items-center text-sm font-family-2 overflow-x-auto overflow-y-hidden hide-scrollbar">
-          {loading && <Spinner animation="border" />}
-          {error && <p className="text-danger">{error}</p>}
+          {loading &&
+            Array(5)
+              .fill(0)
+              .map((_, index) => (
+                <ProductCardSkeletonLarge key={`skeleton-${index}`} />
+              ))}
+          {error && (
+            <div role="alert" className="text-danger" aria-live="polite">
+              {error}
+            </div>
+          )}
           {!loading &&
             !error &&
             products.slice(7, 12).map((item, index) => (
@@ -69,6 +86,8 @@ const Discount = () => {
                     minHeight: "27rem",
                     backgroundColor: "#B5B5B51A",
                   }}
+                  as="article"
+                  aria-label={`${item.title} product card with 10% discount`}
                 >
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
@@ -90,10 +109,12 @@ const Discount = () => {
                       alignItems: "center",
                       justifyContent: "center",
                     }}
+                    aria-label="10 percent off"
+                    role="img"
                   >
                     10% OFF
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     style={{ height: "15rem", width: "auto" }}
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
@@ -101,6 +122,7 @@ const Discount = () => {
                     <Card.Img
                       variant="top"
                       src={item.thumbnail}
+                      alt={`${item.title} - ${item.color} ${item.productTag}`}
                       className="object-fit-contain pt-5 p-2"
                       style={{ height: "15rem" }}
                     />
@@ -123,7 +145,10 @@ const Discount = () => {
                     </Card.Text>
                     <hr className="border-2" />
                     <div className="flex mt-3 justify-between items-center">
-                      <Card.Text className="font-family-2 fw-bold text-lg mb-0">
+                      <Card.Text
+                        className="font-family-2 fw-bold text-lg mb-0"
+                        aria-label={`Price: ${formatCurrency(item.price)}`}
+                      >
                         {formatCurrency(item.price)}
                       </Card.Text>
                       <motion.div
@@ -146,6 +171,7 @@ const Discount = () => {
                           }}
                           className="font-family-2 rounded-1 w-32  p-2"
                           onClick={() => handleClick(item._id || item.id)}
+                          aria-label={`Buy ${item.title}`}
                         />
                       </motion.div>
                     </div>
@@ -154,11 +180,15 @@ const Discount = () => {
               </motion.div>
             ))}
         </div>
-      </div>
-      
+      </section>
+
       {/* Small screen */}
-      <div className="mt-4 p-3 d-block d-lg-none">
-        <motion.h1 
+      <div
+        className="mt-4 p-3 d-block d-lg-none"
+        aria-labelledby="discount-heading-mobile"
+      >
+        <motion.h1
+          id="discount-heading-mobile"
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -167,8 +197,20 @@ const Discount = () => {
         >
           DISCOUNT OFFERS
         </motion.h1>
-        {loading && <Spinner animation="border" />}
-        {error && <p className="text-danger">{error}</p>}
+        {loading && (
+          <div className="mt-2 flex gap-4 align-items-center text-sm font-family-2 overflow-x-auto overflow-y-hidden hide-scrollbar">
+            {Array(5)
+              .fill(0)
+              .map((_, index) => (
+                <ProductCardSkeletonSmall key={`skeleton-mobile-${index}`} />
+              ))}
+          </div>
+        )}
+        {error && (
+          <div role="alert" className="text-danger" aria-live="polite">
+            {error}
+          </div>
+        )}
         <div className="mt-2 flex gap-4 align-items-center text-sm font-family-2 overflow-x-auto overflow-y-hidden hide-scrollbar">
           {!loading &&
             !error &&
@@ -189,6 +231,8 @@ const Discount = () => {
                     minHeight: "15rem",
                     backgroundColor: "#B5B5B51A",
                   }}
+                  as="article"
+                  aria-label={`${item.title} product card with 10% discount`}
                 >
                   <motion.div
                     initial={{ opacity: 0, scale: 0.7, x: -20 }}
@@ -210,10 +254,12 @@ const Discount = () => {
                       alignItems: "center",
                       justifyContent: "center",
                     }}
+                    aria-label="10 percent off"
+                    role="img"
                   >
                     10% OFF
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     style={{ height: "10rem", width: "auto" }}
                     whileTap={{ scale: 0.95 }}
                     transition={{ duration: 0.2 }}
@@ -221,6 +267,7 @@ const Discount = () => {
                     <Card.Img
                       variant="top"
                       src={item.thumbnail}
+                      alt={`${item.title} - ${item.color} ${item.productTag}`}
                       className="object-fit-contain p-2 pt-5"
                       style={{ height: "10rem" }}
                     />
@@ -233,17 +280,21 @@ const Discount = () => {
                           : item.title}
                       </Card.Text>
                     </div>
-                    <Card.Text className="font-family-2 fw-medium text-xs mt-1" style={{ height: "1rem", width: "auto" }}>
+                    <Card.Text
+                      className="font-family-2 fw-medium text-xs mt-1"
+                      style={{ height: "1rem", width: "auto" }}
+                    >
                       {item.productTag} | {item.color}
                     </Card.Text>
                     <hr className="border-2" />
                     <div className="flex mt-3 justify-between items-center">
-                      <Card.Text className="font-family-2 fw-bold text-xs mb-0">
+                      <Card.Text
+                        className="font-family-2 fw-bold text-xs mb-0"
+                        aria-label={`Price: ${formatCurrency(item.price)}`}
+                      >
                         {formatCurrency(item.price)}
                       </Card.Text>
-                      <motion.div
-                        whileTap={{ scale: 0.9 }}
-                      >
+                      <motion.div whileTap={{ scale: 0.9 }}>
                         <ActionButton
                           variant="none"
                           size="sm"
@@ -260,6 +311,7 @@ const Discount = () => {
                           }}
                           className="font-family-2 rounded-1 w-24"
                           onClick={() => handleClick(item._id || item.id)}
+                          aria-label={`Buy ${item.title}`}
                         />
                       </motion.div>
                     </div>

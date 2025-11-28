@@ -22,6 +22,9 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
+    // Setting alert message here so it's ready if an error occurs
+    setAlertMessage(null); 
+
     try {
       const response = await fetch("https://backend-toetally-1.onrender.com/api/auth/login", {
         method: "POST",
@@ -52,24 +55,43 @@ const Login = () => {
 
   return (
     <>
-      
+      <div 
+        className="sr-only" 
+        role="alert" 
+        aria-live="polite"
+      >
+        {alertMessage}
+      </div>
 
       <div className="flex items-center flex-col lg:flex-row mx-auto 2xl:container">
-   
-        {/* Left Image Section */}
+    
+       
         <div className="lg:w-[50%] h-[100vh] hidden lg:block relative">
-        {alertMessage && <Alert message={alertMessage} type={alertType} onClose={() => setAlertMessage(null)} />}
-          <img src="/auth.svg" alt="login image" className="w-full h-full object-cover" />
+          {alertMessage && <Alert message={alertMessage} type={alertType} onClose={() => setAlertMessage(null)} />}
+          
+          <img 
+            src="/auth.svg" 
+            alt="Decorative illustration for login page" 
+            className="w-full h-full object-cover" 
+          />
           <div className="flex justify-center">
-            <img src="/authv.svg" alt="auth vector" className="absolute bottom-8" />
+            <img 
+              src="/authv.svg" 
+              alt="Decorative vector shape" 
+              className="absolute bottom-8" 
+            />
           </div>
         </div>
 
         {/* Login Form Section */}
         <div className="lg:w-[45%] w-full py-12 lg:py-0 flex flex-col justify-center items-center md:px-8">
           <div className="w-5/6 2xl:w-4/6 font-font-family-2">
-            <Link to="/" className="flex justify-center gap-1 items-center link-container text-black no-underline">
-              <img src="/logo.svg" alt="logo" className="w-16 h-8" />
+            <Link 
+              to="/" 
+              className="flex justify-center gap-1 items-center link-container text-black no-underline"
+              aria-label="Go to homepage"
+            >
+              <img src="/logo.svg" alt="TOETALLY logo" className="w-16 h-8" />
               <h1 className="font-font-family-1 text-xl font-bold">TOETALLY</h1>
             </Link>
 
@@ -80,13 +102,21 @@ const Login = () => {
             </div>
 
             {/* Login Form */}
-            <form className="mx-auto flex flex-col justify-center" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <form 
+              className="mx-auto flex flex-col justify-center" 
+              onSubmit={handleSubmit(onSubmit)} 
+              autoComplete="off"
+            >
               {/* Email Input */}
-              <label htmlFor="email" className="text-sm lg:hidden font-bold mb-2">Email</label>
+              <label htmlFor="email" className="text-sm font-bold mb-2">
+                <span className="lg:sr-only">Email</span> 
+              </label>
               <input
                 type="text"
+                id="email" 
                 className="rounded-sm outline-none border-[#696767] w-full mx-auto border-[1px] px-3 py-2"
                 placeholder="Email*"
+                aria-invalid={errors.email ? "true" : "false"}
                 {...register("email", {
                   required: "Email is required.",
                   pattern: {
@@ -95,32 +125,48 @@ const Login = () => {
                   },
                 })}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+             
+              {errors.email && <p role="alert" className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
 
-              {/* Password Input */}
+             
               <div className="relative mt-3">
-                <label htmlFor="password" className="text-sm lg:hidden font-bold mb-2">Password</label>
+                <label htmlFor="password" className="text-sm font-bold mb-2">
+                  <span className="lg:sr-only">Password</span>
+                </label>
                 <input
                   type={showPassword ? "text" : "password"}
+                  id="password"
                   className="rounded-sm outline-none border-[#696767] w-full mx-auto border-[1px] px-3 py-2"
                   placeholder="Password*"
+                  aria-invalid={errors.password ? "true" : "false"} 
                   {...register("password", { required: "Password is required." })}
                 />
-                <span
-                  className="absolute right-3 top-11 lg:top-3 cursor-pointer text-gray-500"
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 mt-1 lg:mt-0 cursor-pointer text-gray-500 p-1"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-controls="password" 
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
+                  {showPassword ? <FaEyeSlash aria-hidden="true" /> : <FaEye aria-hidden="true" />}
+                </button>
               </div>
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+              {errors.password && <p role="alert" className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+              
               {/* Submit Button */}
               <button
                 type="submit"
                 className="bg-[#01497C] w-full py-2.5 rounded-md mx-auto text-[white] mt-4 flex justify-center items-center"
+                disabled={isLoading}
+                aria-busy={isLoading ? "true" : "false"} 
               >
                 {isLoading ? (
-                  <LineWave height="25" width="50" color="#ffffff" ariaLabel="line-wave-loading" />
+                  <LineWave 
+                    height="25" 
+                    width="50" 
+                    color="#ffffff" 
+                    ariaLabel="Loading, please wait" 
+                  />
                 ) : (
                   "Continue"
                 )}
@@ -135,8 +181,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-
-      {/* Show modal if login is successful */}
       {showModal && <LoginModal onClose={() => setShowModal(false)} />}
     </>
   );
