@@ -5,8 +5,8 @@ const SignupModal = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    onClose(); // Close the modal
-    navigate("/login"); // Redirect to login page
+    onClose(); 
+    navigate("/");
   };
 
   return (

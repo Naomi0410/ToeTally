@@ -16,7 +16,7 @@ const NotFound = () => {
         <h2 className="text-center text-[30px] font-semibold">Page Not Found</h2>
       </div>
 
-      {/* Go Home Button */}
+      
       <Link to="/" className="flex gap-2 border-b-[1px] border-black items-center mx-auto mt-6 no-underline">
         <img src="/back.svg" alt="arrow" />
         <p className="mt-3 text-black">Go Home</p>

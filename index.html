@@ -2,39 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon_io/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="ToeTally Team" />
-    <meta name="theme-color" content="#ffffff" />
-
-    <!-- SEO Meta Tags -->
+    
+    <!-- Primary Meta Tags -->
+    <title>ToeTally - Premium Branded Footwear | Shop Authentic Sneakers Online</title>
+    <meta
+      name="title"
+      content="ToeTally - Premium Branded Footwear | Shop Authentic Sneakers Online"
+    />
     <meta
       name="description"
-      content="ToeTally - Your premier destination for authentic branded footwear. Shop the latest shoes from top brands."
+      content="Step into comfort and walk with confidence. Shop authentic branded footwear, sneakers, and shoes from top brands at ToeTally. Free shipping on orders over ₦50,000."
     />
     <meta
       name="keywords"
-      content="shoes, footwear, sneakers, branded shoes, online shoe store"
+      content="shoes, footwear, sneakers, branded shoes, online shoe store, Nigeria shoes, authentic sneakers, Nike, Adidas, buy shoes online"
     />
+    <meta name="author" content="ToeTally Team" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#01497C" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="ToeTally - Premium Branded Footwear" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://toe-tally-phi.vercel.app/" />
+    <meta property="og:title" content="ToeTally - Premium Branded Footwear | Shop Authentic Sneakers Online" />
     <meta
       property="og:description"
-      content="Shop authentic branded shoes, sneakers, and footwear at ToeTally."
+      content="Step into comfort and walk with confidence. Shop authentic branded shoes, sneakers, and footwear at ToeTally."
     />
-    <meta property="og:image" content="/toetallyPreview.png" />
-    <meta property="og:url" content="https://toe-tally-phi.vercel.app/" />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://toe-tally-phi.vercel.app/toetallyPreview.png" />
+    <meta property="og:image:alt" content="ToeTally footwear collection preview" />
+    <meta property="og:site_name" content="ToeTally" />
+    <meta property="og:locale" content="en_NG" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://toe-tally-phi.vercel.app/" />
     <meta name="twitter:title" content="ToeTally - Premium Branded Footwear" />
     <meta
       name="twitter:description"
-      content="Discover the latest sneakers and branded shoes at ToeTally."
+      content="Discover the latest sneakers and branded shoes at ToeTally. Step into comfort, walk with confidence."
     />
-    <meta name="twitter:image" content="/toetallyPreview.png" />
+    <meta name="twitter:image" content="https://toe-tally-phi.vercel.app/toetallyPreview.png" />
+    <meta name="twitter:image:alt" content="ToeTally footwear collection preview" />
 
     <!-- Canonical -->
     <link rel="canonical" href="https://toe-tally-phi.vercel.app/" />
@@ -58,18 +68,18 @@
       sizes="16x16"
       href="/favicon_io/favicon-16x16.png"
     />
+    <link rel="manifest" href="/favicon_io/site.webmanifest" />
 
     <!-- Preconnect to Backend and CDN -->
-    <link rel="preconnect" href="https://backend-toetally-1.onrender.com" />
+    <link rel="preconnect" href="https://backend-toetally-1.onrender.com" crossorigin />
     <link rel="dns-prefetch" href="https://backend-toetally-1.onrender.com" />
-    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://js.paystack.co" crossorigin />
+    <link rel="dns-prefetch" href="https://js.paystack.co" />
 
     <!-- Preload Critical Assets -->
-    <link rel="preload" as="image" href="/logo.png" />
-
-    <!-- Preload Fonts (if using custom fonts) -->
-    <!-- <link rel="preload" as="font" href="/fonts/your-font.woff2" type="font/woff2" crossorigin> -->
+    <link rel="preload" as="image" href="/logo.png" fetchpriority="high" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -79,7 +89,8 @@
         "name": "ToeTally",
         "url": "https://toe-tally-phi.vercel.app",
         "logo": "https://toe-tally-phi.vercel.app/logo.png",
-        "description": "ToeTally - Your premier destination for authentic branded footwear.",
+        "image": "https://toe-tally-phi.vercel.app/toetallyPreview.png",
+        "description": "Step into comfort and walk with confidence. Your premier destination for authentic branded footwear, sneakers, and shoes from top brands.",      
         "sameAs": [
           "https://www.facebook.com/ToeTally",
           "https://www.instagram.com/ToeTally",
@@ -87,10 +98,14 @@
         ]
       }
     </script>
-
-    <title>ToeTally - Premium Branded Footwear</title>
   </head>
   <body>
+    <noscript>
+      <div style="padding: 20px; text-align: center; background: #f5f5f5;">
+        <h1>JavaScript Required</h1>
+        <p>ToeTally requires JavaScript to be enabled for the best shopping experience. Please enable JavaScript in your browser settings.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

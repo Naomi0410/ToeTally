@@ -115,13 +115,15 @@ const Cart = () => {
   );
 
   return (
-    <>
+    <main aria-label="Shopping Cart">
       {/* Breadcrumb */}
-      <motion.div
+      <motion.nav
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         style={{ backgroundColor: "#EBEBEB" }}
+        role="navigation"
+        aria-label="Breadcrumb"
       >
         <div className="px-12 lg:py-2 xl:py-3 lg:flex gap-3 hidden">
           <Link
@@ -130,10 +132,16 @@ const Cart = () => {
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-base">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-base"
+          >
             /
           </span>
-          <span className="font-semibold font-family-2 text-base text-black">
+          <span
+            aria-current="page"
+            className="font-semibold font-family-2 text-base text-black"
+          >
             Cart
           </span>
         </div>
@@ -145,14 +153,20 @@ const Cart = () => {
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-xs">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-xs"
+          >
             /
           </span>
-          <span className="font-semibold font-family-2 text-xs">
+          <span
+            aria-current="page"
+            className="font-semibold font-family-2 text-xs"
+          >
             Cart
           </span>
         </div>
-      </motion.div>
+      </motion.nav>
 
       {/* Page Title */}
       <motion.h1
@@ -173,8 +187,14 @@ const Cart = () => {
       </motion.h1>
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[400px]">
-          <Spinner animation="border" className="text-[#01497C]" />
+        <div
+          className="flex justify-center items-center min-h-[400px]"
+          role="status"
+          aria-live="polite"
+        >
+          <Spinner animation="border" className="text-[#01497C]">
+            <span className="visually-hidden">Loading cart items...</span>
+          </Spinner>
         </div>
       ) : cartData.length === 0 ? (
         <motion.div
@@ -182,11 +202,13 @@ const Cart = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
           className="text-center py-16"
+          role="region"
+          aria-label="Empty cart message"
         >
           <div className="max-w-md mx-auto">
             <img
               src={cartImg}
-              alt="Empty cart"
+              alt="An empty shopping cart icon."
               className="w-48 h-48 mx-auto mb-6 opacity-50"
             />
             <h2 className="font-family-3 text-2xl lg:text-3xl mb-4 text-gray-800">
@@ -216,6 +238,8 @@ const Cart = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
                 className="lg:col-span-2"
+                role="region"
+                aria-label="List of items in cart"
               >
                 <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm">
                   {cartData.map((item, index) => (
@@ -225,6 +249,7 @@ const Cart = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: index * 0.1 }}
                       className="pb-6"
+                      role="listitem"
                     >
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="bg-[#F5F5F5] rounded-xl p-4 flex items-center justify-center w-full sm:w-32 h-32">
@@ -234,6 +259,7 @@ const Cart = () => {
                               item.product.image ||
                               cartImg
                             }
+                            alt={`Image of ${item.product.title}`}
                             className="object-contain max-h-full max-w-full"
                           />
                         </div>
@@ -244,24 +270,31 @@ const Cart = () => {
                                 {item.product.title}
                               </h3>
                               <p className="text-gray-600 text-sm mt-1">
-                                Size: {item.size}
+                                Size:{" "}
+                                <span aria-live="polite">{item.size}</span>
                               </p>
                             </div>
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => removeItem(item.product._id)}
+                              aria-label={`Remove ${item.product.title} from cart`}
                               className="text-red-500 hover:text-red-700 transition-colors p-2"
                             >
-                              <RiDeleteBinFill size={20} />
+                              <RiDeleteBinFill size={20} aria-hidden="true" />
                             </motion.button>
                           </div>
 
                           <div className="flex justify-between items-center mt-4">
                             <p className="font-family-2 text-xl lg:text-2xl font-bold text-[#01497C]">
+                              <span className="visually-hidden">Price: </span>
                               {formatCurrency(item.product.price)}
                             </p>
-                            <div className="flex items-center border-2 border-gray-300 rounded-lg">
+                            <div
+                              className="flex items-center border-2 border-gray-300 rounded-lg"
+                              role="group"
+                              aria-label={`Quantity of ${item.product.title}`}
+                            >
                               <motion.button
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() =>
@@ -271,10 +304,18 @@ const Cart = () => {
                                   )
                                 }
                                 className="px-4 py-2 hover:bg-gray-100 transition-colors"
+                                aria-label={`Decrease ${
+                                  item.product.title
+                                } quantity to ${item.quantity - 1}`}
+                                disabled={item.quantity === 1} // Disable when quantity is 1 (will be removed instead)
                               >
-                                <FaMinus size={12} />
+                                <FaMinus size={12} aria-hidden="true" />
                               </motion.button>
-                              <span className="px-6 py-2 font-semibold border-x-2 border-gray-300">
+                              <span
+                                className="px-6 py-2 font-semibold border-x-2 border-gray-300"
+                                aria-live="polite"
+                                aria-atomic="true"
+                              >
                                 {item.quantity}
                               </span>
                               <motion.button
@@ -285,16 +326,19 @@ const Cart = () => {
                                     item.quantity + 1
                                   )
                                 }
+                                aria-label={`Increase ${
+                                  item.product.title
+                                } quantity to ${item.quantity + 1}`}
                                 className="px-4 py-2 hover:bg-gray-100 transition-colors"
                               >
-                                <FaPlus size={12} />
+                                <FaPlus size={12} aria-hidden="true" />
                               </motion.button>
                             </div>
                           </div>
                         </div>
                       </div>
                       {index < cartData.length - 1 && (
-                        <hr className="mt-6 border-gray-200" />
+                        <hr className="mt-6 border-gray-200" role="separator" />
                       )}
                     </motion.div>
                   ))}
@@ -307,23 +351,28 @@ const Cart = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="lg:col-span-1"
+                role="complementary"
+                aria-labelledby="order-summary-heading"
               >
                 <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm sticky top-4">
-                  <h2 className="font-family-3 text-2xl lg:text-3xl mb-6">
+                  <h2
+                    id="order-summary-heading"
+                    className="font-family-3 text-2xl lg:text-3xl mb-6"
+                  >
                     Order Summary
                   </h2>
 
                   <div className="space-y-4">
                     <div className="flex justify-between font-family-2 text-lg">
                       <p className="text-gray-600">Subtotal</p>
-                      <p className="font-semibold">
+                      <p className="font-semibold" aria-live="polite">
                         {formatCurrency(totalPrice)}
                       </p>
                     </div>
 
                     <div className="flex justify-between font-family-2 text-lg text-red-500">
                       <p className="text-gray-600">Discount (20%)</p>
-                      <p className="font-semibold">
+                      <p className="font-semibold" aria-live="polite">
                         -{formatCurrency(totalPrice * 0.2)}
                       </p>
                     </div>
@@ -333,34 +382,41 @@ const Cart = () => {
                       <p className="font-semibold">{formatCurrency(5000)}</p>
                     </div>
 
-                    <hr className="border-gray-300" />
+                    <hr className="border-gray-300" role="separator" />
 
                     <div className="flex justify-between font-family-2 text-xl">
                       <p className="font-bold">Total</p>
-                      <p className="font-bold text-[#01497C]">
+                      <p
+                        className="font-bold text-[#01497C]"
+                        aria-live="polite"
+                        aria-atomic="true"
+                      >
                         {formatCurrency(totalPrice - totalPrice * 0.2 + 5000)}
                       </p>
                     </div>
                   </div>
 
                   {/* Promo Code */}
-                  <div className="mt-6">
+                  <div className="mt-6" role="form">
                     <div className="flex gap-2">
                       <div className="flex-1 flex items-center bg-[#F0F0F0] rounded-lg px-3 py-3">
                         <img
                           src="/tag.svg"
-                          alt="tag"
+                          alt="Price tag icon"
+                          aria-hidden="true"
                           className="w-5 h-5 mr-2"
                         />
                         <input
                           type="text"
                           placeholder="Add promo code"
+                          aria-label="Promo code input"
                           className="bg-transparent w-full outline-none font-family-2 text-sm"
                         />
                       </div>
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        aria-label="Apply promo code"
                         className="bg-[#01497C] text-white px-6 rounded-lg font-family-2 font-semibold hover:bg-[#013A63] transition-colors"
                       >
                         Apply
@@ -375,7 +431,12 @@ const Cart = () => {
                     onClick={() => navigate("/checkout")}
                   >
                     Go to Checkout
-                    <img src="/arrow1.svg" alt="arrow" className="w-5 h-5" />
+                    <img
+                      src="/arrow1.svg"
+                      alt="arrow"
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                    />
                   </motion.button>
                 </div>
               </motion.div>
@@ -391,8 +452,13 @@ const Cart = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
                 className="lg:col-span-2"
+                role="region"
+                aria-label="List of items in cart"
               >
-                <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm">
+                <div
+                  role="list"
+                  className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm"
+                >
                   {cartData.map((item, index) => (
                     <motion.div
                       key={item.product._id}
@@ -400,6 +466,7 @@ const Cart = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: index * 0.1 }}
                       className="pb-6"
+                      role="listitem"
                     >
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="bg-[#F5F5F5] rounded-xl p-4 flex items-center justify-center w-full sm:w-32 h-32">
@@ -409,6 +476,7 @@ const Cart = () => {
                               item.product.image ||
                               cartImg
                             }
+                            alt={`Image of ${item.product.title}`}
                             className="object-contain max-h-full max-w-full"
                           />
                         </div>
@@ -419,23 +487,30 @@ const Cart = () => {
                                 {item.product.title}
                               </h3>
                               <p className="text-gray-600 text-sm mt-1">
-                                Size: {item.size}
+                                Size:{" "}
+                                <span aria-live="polite">{item.size}</span>
                               </p>
                             </div>
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => removeItem(item.product._id)}
+                              aria-label={`Remove ${item.product.title} from cart`}
                               className="text-red-500 hover:text-red-700 transition-colors p-2"
                             >
-                              <RiDeleteBinFill size={20} />
+                              <RiDeleteBinFill size={20} aria-hidden="true" />
                             </motion.button>
                           </div>
                           <div className="flex justify-between items-center mt-4">
                             <p className="font-family-2 text-sm font-bold text-[#01497C]">
+                              <span className="visually-hidden">Price: </span>
                               {formatCurrency(item.product.price)}
                             </p>
-                            <div className="flex items-center border-2 border-gray-300 rounded-lg">
+                            <div
+                              className="flex items-center border-2 border-gray-300 rounded-lg"
+                              role="group"
+                              aria-label={`Quantity of ${item.product.title}`}
+                            >
                               <motion.button
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() =>
@@ -445,10 +520,18 @@ const Cart = () => {
                                   )
                                 }
                                 className="px-2 py-1 hover:bg-gray-100 transition-colors"
+                                aria-label={`Decrease ${
+                                  item.product.title
+                                } quantity to ${item.quantity - 1}`}
+                                disabled={item.quantity === 1}
                               >
-                                <FaMinus size={12} />
+                                <FaMinus size={12} aria-hidden="true" />
                               </motion.button>
-                              <span className="px-4 py-1 font-semibold border-x-2 border-gray-300">
+                              <span
+                                className="px-4 py-1 font-semibold border-x-2 border-gray-300"
+                                aria-live="polite"
+                                aria-atomic="true"
+                              >
                                 {item.quantity}
                               </span>
                               <motion.button
@@ -460,15 +543,18 @@ const Cart = () => {
                                   )
                                 }
                                 className="px-2 py-1 hover:bg-gray-100 transition-colors"
+                                aria-label={`Increase ${
+                                  item.product.title
+                                } quantity to ${item.quantity + 1}`}
                               >
-                                <FaPlus size={12} />
+                                <FaPlus size={12} aria-hidden="true" />
                               </motion.button>
                             </div>
                           </div>
                         </div>
                       </div>
                       {index < cartData.length - 1 && (
-                        <hr className="mt-6 border-gray-200" />
+                        <hr className="mt-6 border-gray-200" role="separator" />
                       )}
                     </motion.div>
                   ))}
@@ -480,52 +566,68 @@ const Cart = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="lg:col-span-1"
+                role="complementary"
+                aria-labelledby="order-summary-heading-mobile"
               >
                 <div className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-sm sticky top-4">
-                  <h2 className="font-family-3 text-2xl mb-6">Order Summary</h2>
+                  <h2
+                    id="order-summary-heading-mobile"
+                    className="font-family-3 text-2xl mb-6"
+                  >
+                    Order Summary
+                  </h2>
                   <div className="space-y-4">
                     <div className="flex justify-between font-family-2 text-base">
                       <p className="text-gray-600">Subtotal</p>
-                      <p className="font-semibold">
+                      <p className="font-semibold" aria-live="polite">
                         {formatCurrency(totalPrice)}
                       </p>
                     </div>
                     <div className="flex justify-between font-family-2 text-base text-red-500">
                       <p className="text-gray-600">Discount (20%)</p>
-                      <p className="font-semibold">
+                      <p className="font-semibold" aria-live="polite">
                         -{formatCurrency(totalPrice * 0.2)}
                       </p>
                     </div>
                     <div className="flex justify-between font-family-2 text-base">
                       <p className="text-gray-600">Delivery Fee</p>
-                      <p className="font-semibold">{formatCurrency(5000)}</p>
+                      <p className="font-semibold" aria-live="polite">
+                        {formatCurrency(5000)}
+                      </p>
                     </div>
-                    <hr className="border-gray-300" />
+                    <hr className="border-gray-300" role="separator" />
                     <div className="flex justify-between font-family-2 text-lg">
                       <p className="font-bold">Total</p>
-                      <p className="font-bold text-[#01497C]">
+                      <p
+                        className="font-bold text-[#01497C]"
+                        aria-live="polite"
+                        aria-atomic="true"
+                      >
                         {formatCurrency(totalPrice - totalPrice * 0.2 + 5000)}
                       </p>
                     </div>
                   </div>
                   {/* Promo Code */}
-                  <div className="mt-6">
+                  <div className="mt-6" role="form">
                     <div className="flex gap-2">
                       <div className="flex-1 flex items-center bg-[#F0F0F0] rounded-lg px-3 py-2">
                         <img
                           src="/tag.svg"
                           alt="tag"
                           className="w-5 h-5 mr-2"
+                          aria-hidden="true"
                         />
                         <input
                           type="text"
                           placeholder="Add promo code"
+                          aria-label="Promo code input"
                           className="bg-transparent w-full outline-none font-family-2 text-sm"
                         />
                       </div>
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        aria-label="Apply promo code"
                         className="bg-[#01497C] text-white px-6 rounded-lg font-family-2 font-semibold hover:bg-[#013A63] transition-colors"
                       >
                         Apply
@@ -540,7 +642,12 @@ const Cart = () => {
                     onClick={() => navigate("/checkout")}
                   >
                     Go to Checkout
-                    <img src="/arrow1.svg" alt="arrow" className="w-5 h-5" />
+                    <img
+                      src="/arrow1.svg"
+                      alt="arrow"
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                    />
                   </motion.button>
                 </div>
               </motion.div>
@@ -549,10 +656,8 @@ const Cart = () => {
         </>
       )}
 
-      <div className="mx-auto lg:w-11/12">
-        <Subscribe />
-      </div>
-    </>
+      <Subscribe />
+    </main>
   );
 };
 

@@ -6,9 +6,9 @@ const LoginModal = ({ onClose }) => {
 
   const handleClose = () => {
     if (onClose) {
-      onClose(); // Close the modal
+      onClose(); 
     }
-    navigate("/"); // Redirect to home page
+    navigate("/"); 
   };
 
   return (

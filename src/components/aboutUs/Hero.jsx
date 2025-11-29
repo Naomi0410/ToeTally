@@ -3,24 +3,27 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <>
-      <div className="bg-[url('/hero-bg.svg')] text-white bg-cover bg-center flex items-center justify-center h-[200px] md:h-[350px] mx-auto w-full">
+      <section className="bg-[url('/hero-bg.svg')] text-white bg-cover bg-center flex items-center justify-center h-[200px] md:h-[350px] mx-auto w-full"
+        role="banner"
+        aria-labelledby="hero-heading">
         <div className="flex flex-col gap-2 justify-center items-center ">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-family-3">
+          <h1  id="hero-heading" className="text-4xl md:text-5xl lg:text-6xl font-family-3">
             About Us
           </h1>
-          <p className="font-family-2 text-xs md:text-sm lg:text-base xl:text-lg font-semibold">
+          <nav aria-label="Breadcrumb" className="font-family-2 text-xs md:text-sm lg:text-base xl:text-lg font-semibold">
             <Link
               to="/"
               className="no-underline text-white font-family-2 text-xs md:text-sm lg:text-base xl:text-lg font-light"
+              aria-label="Go to home page"
             >
               Home /
             </Link>{" "}
             About Us
-          </p>
+          </nav>
         </div>
-      </div>
+      </section>
 
-      <div className="grid md:grid-cols-2 justify-center items-center md:px-6 lg:px-12">
+      <section className="grid md:grid-cols-2 justify-center items-center md:px-6 lg:px-12">
         <div className="py-5 hidden md:block lg:w-5/6 mx-auto">
           <h1 className="font-medium font-family-3 mx-auto md:text-3xl lg:text-4xl xl:text-5xl">
             Who We Are
@@ -64,7 +67,7 @@ const Hero = () => {
             alt="who we are image"
           />
         </div>
-      </div>
+      </section>
     </>
   );
 };

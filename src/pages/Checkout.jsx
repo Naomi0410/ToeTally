@@ -11,11 +11,15 @@ const API_BASE_URL = "https://backend-toetally-1.onrender.com/api";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { register } = useForm();
+  const {
+    register,
+    formState: { errors },
+  } = useForm();
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({ name: "", email: "" });
   const [alert, setAlert] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState("");
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -117,11 +121,12 @@ const Checkout = () => {
           onClose={() => setAlert(null)}
         />
       )}
-      <motion.div
+      <motion.nav
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         style={{ backgroundColor: "#EBEBEB" }}
+        aria-label="Breadcrumb"
       >
         <div className="px-12 lg:py-2 xl:py-3 lg:flex gap-3 hidden">
           <Link
@@ -130,7 +135,10 @@ const Checkout = () => {
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-base">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-base"
+          >
             /
           </span>
           <Link
@@ -139,10 +147,16 @@ const Checkout = () => {
           >
             Cart
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-base">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-base"
+          >
             /
           </span>
-          <span className="font-semibold font-family-2 text-base text-black">
+          <span
+            aria-current="page"
+            className="font-semibold font-family-2 text-base text-black"
+          >
             Checkout
           </span>
         </div>
@@ -153,7 +167,10 @@ const Checkout = () => {
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-xs">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-xs"
+          >
             /
           </span>
           <Link
@@ -162,12 +179,20 @@ const Checkout = () => {
           >
             Cart
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-xs">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-xs"
+          >
             /
           </span>
-          <span className="font-semibold font-family-2 text-xs">Checkout</span>
+          <span
+            aria-current="page"
+            className="font-semibold font-family-2 text-xs"
+          >
+            Checkout
+          </span>
         </div>
-      </motion.div>
+      </motion.nav>
 
       {/* large screens */}
       <Row className="py-4 px-12 d-none d-lg-flex justify-between ">
@@ -176,123 +201,224 @@ const Checkout = () => {
           <h1 className="font-family-3 text-3xl lg:text-4xl xl:text-5xl text-black">
             Billing Details
           </h1>
-          <Form className="mt-4">
+          <Form className="mt-4" aria-label="Billing information form">
             <div className="d-flex gap-3">
-              <Form.Control
-                {...register("firstName", validateFields.name)}
-                placeholder="First Name"
-                type="text"
-                size="lg"
-                className="font-family-2 ps-4"
-                defaultValue={userData.firstName}
-              />
-              <Form.Control
-                {...register("lastName", validateFields.name)}
-                placeholder="Last Name"
-                type="text"
-                size="lg"
-                className="font-family-2 ps-4 "
-                defaultValue={userData.lastName}
-              />
+              <Form.Group className="flex-fill">
+                <Form.Label htmlFor="firstName" className="visually-hidden">
+                  First Name
+                </Form.Label>
+                <Form.Control
+                  id="firstName"
+                  {...register("firstName", validateFields.name)}
+                  placeholder="First Name"
+                  type="text"
+                  size="lg"
+                  className="font-family-2 ps-4"
+                  defaultValue={userData.firstName}
+                  aria-required="true"
+                  aria-invalid={errors.firstName ? "true" : "false"}
+                  aria-describedby={
+                    errors.firstName ? "firstName-error" : undefined
+                  }
+                />
+                {errors.firstName && (
+                  <span
+                    id="firstName-error"
+                    className="text-danger small"
+                    role="alert"
+                  >
+                    {errors.firstName.message}
+                  </span>
+                )}
+              </Form.Group>
+              <Form.Group className="flex-fill">
+                <Form.Label htmlFor="lastName" className="visually-hidden">
+                  Last Name
+                </Form.Label>
+                <Form.Control
+                  id="lastName"
+                  {...register("lastName", validateFields.name)}
+                  placeholder="Last Name"
+                  type="text"
+                  size="lg"
+                  className="font-family-2 ps-4"
+                  defaultValue={userData.lastName}
+                  aria-required="true"
+                  aria-invalid={errors.lastName ? "true" : "false"}
+                  aria-describedby={
+                    errors.lastName ? "lastName-error" : undefined
+                  }
+                />
+                {errors.lastName && (
+                  <span
+                    id="lastName-error"
+                    className="text-danger small"
+                    role="alert"
+                  >
+                    {errors.lastName.message}
+                  </span>
+                )}
+              </Form.Group>
             </div>
-            <Form.Control
-              {...register("email", validateFields.email)}
-              placeholder="Email Address"
-              type="text"
-              size="lg"
-              className="font-family-2 ps-4 mt-4"
-              defaultValue={userData.email}
-            />
-            <Form.Control
-              {...register("country", validateFields.country)}
-              placeholder="Country/region"
-              type="text"
-              size="lg"
-              className="font-family-2 ps-4 mt-4"
-            />
-            <Form.Control
-              {...register("address", validateFields.address)}
-              placeholder="Street Address"
-              type="text"
-              size="lg"
-              className="font-family-2 ps-4 mt-4"
-            />
-            <Form.Control
-              {...register("city", validateFields.city)}
-              placeholder="Town/city"
-              type="text"
-              size="lg"
-              className="font-family-2 ps-4 mt-4"
-            />
-            <Form.Control
-              {...register("state", validateFields.state)}
-              placeholder="State"
-              type="text"
-              size="lg"
-              className="font-family-2 ps-4 mt-4"
-            />
-            <Form.Control
-              {...register("phone", validateFields.phone)}
-              placeholder="Phone"
-              type="text"
-              size="lg"
-              className="font-family-2 ps-4 mt-4"
-            />
+            <Form.Group>
+              <Form.Label htmlFor="email" className="visually-hidden">
+                Email Address
+              </Form.Label>
+              <Form.Control
+                id="email"
+                {...register("email", validateFields.email)}
+                placeholder="Email Address"
+                type="email"
+                size="lg"
+                className="font-family-2 ps-4 mt-4"
+                defaultValue={userData.email}
+                aria-required="true"
+                aria-invalid={errors.email ? "true" : "false"}
+                aria-describedby={errors.email ? "email-error" : undefined}
+              />
+              {errors.email && (
+                <span
+                  id="email-error"
+                  className="text-danger small"
+                  role="alert"
+                >
+                  {errors.email.message}
+                </span>
+              )}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="country" className="visually-hidden">
+                Country/Region
+              </Form.Label>
+              <Form.Control
+                id="country"
+                {...register("country", validateFields.country)}
+                placeholder="Country/region"
+                type="text"
+                size="lg"
+                className="font-family-2 ps-4 mt-4"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="address" className="visually-hidden">
+                Street Address
+              </Form.Label>
+              <Form.Control
+                id="address"
+                {...register("address", validateFields.address)}
+                placeholder="Street Address"
+                type="text"
+                size="lg"
+                className="font-family-2 ps-4 mt-4"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="city" className="visually-hidden">
+                Town/City
+              </Form.Label>
+              <Form.Control
+                id="city"
+                {...register("city", validateFields.city)}
+                placeholder="Town/city"
+                type="text"
+                size="lg"
+                className="font-family-2 ps-4 mt-4"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="state" className="visually-hidden">
+                State
+              </Form.Label>
+              <Form.Control
+                id="state"
+                {...register("state", validateFields.state)}
+                placeholder="State"
+                type="text"
+                size="lg"
+                className="font-family-2 ps-4 mt-4"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="phone" className="visually-hidden">
+                Phone Number
+              </Form.Label>
+              <Form.Control
+                id="phone"
+                {...register("phone", validateFields.phone)}
+                placeholder="Phone"
+                type="tel"
+                size="lg"
+                className="font-family-2 ps-4 mt-4"
+                aria-required="true"
+              />
+            </Form.Group>
           </Form>
         </Col>
 
         {/* Order Summary - Visible on all screens */}
         <Col xs={12} lg={5} className="mt-5">
-          <h1 className="font-family-3 text-3xl lg:text-4xl text-black">
-            Your Order
-          </h1>
-          <hr />
-          {loading ? (
-            <p>Loading cart items...</p>
-          ) : cartData.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            <>
-              <div className="d-flex justify-content-between font-family-2 font-bold">
-                <p>Product</p>
-                <p>SubTotal</p>
+          <section aria-labelledby="order-summary-heading">
+            <h2
+              id="order-summary-heading"
+              className="font-family-3 text-3xl lg:text-4xl text-black"
+            >
+              Your Order
+            </h2>
+            <hr />
+            {loading ? (
+              <div role="status" aria-live="polite">
+                <p>Loading cart items...</p>
               </div>
-              {cartData.map((item) => (
-                <div
-                  key={item.product?._id || Math.random()}
-                  className="d-flex justify-content-between font-family-2"
-                >
-                  <p className="text-[#808080]">
-                    {item.product?.title || "Unnamed Product"} x{item.quantity}
-                  </p>
-                  <p className="font-bold">
-                    {formatCurrency(item.product?.price * item.quantity)}
-                  </p>
+            ) : cartData.length === 0 ? (
+              <p>Your cart is empty.</p>
+            ) : (
+              <>
+                <div className="d-flex justify-content-between font-family-2 font-bold">
+                  <span>Product</span>
+                  <span>SubTotal</span>
                 </div>
-              ))}
+                {cartData.map((item) => (
+                  <div
+                    key={item.product?._id || Math.random()}
+                    className="d-flex justify-content-between font-family-2"
+                  >
+                    <span className="text-[#808080]">
+                      {item.product?.title || "Unnamed Product"} x
+                      {item.quantity}
+                    </span>
+                    <span className="font-bold">
+                      {formatCurrency(item.product?.price * item.quantity)}
+                    </span>
+                  </div>
+                ))}
 
-              <hr />
-              <div className="d-flex justify-content-between font-family-2 font-normal">
-                <p className="font-bold">Subtotal</p>
-                <p>{formatCurrency(totalPrice)}</p>
-              </div>
-              <div className="d-flex font-family-2 font-normal">
-                <p className="font-bold">Shipping</p>
-                <span className="ms-auto">
-                  <span className="text-[#808080] inline">
-                    (Regular Shipping)
-                  </span>{" "}
-                  {formatCurrency(5000)}
-                </span>
-              </div>
+                <hr />
+                <div className="d-flex justify-content-between font-family-2 font-normal">
+                  <span className="font-bold">Subtotal</span>
+                  <span>{formatCurrency(totalPrice)}</span>
+                </div>
+                <div className="d-flex font-family-2 font-normal">
+                  <span className="font-bold">Shipping</span>
+                  <span className="ms-auto">
+                    <span className="text-[#808080] inline">
+                      (Regular Shipping)
+                    </span>{" "}
+                    {formatCurrency(5000)}
+                  </span>
+                </div>
 
-              <hr />
-              <div className="d-flex justify-content-between text-lg font-bold font-family-2">
-                <p>Total</p>
-                <p>{formatCurrency(totalPrice + 5000)}</p>
-              </div>
-            </>
-          )}
+                <hr />
+                <div className="d-flex justify-content-between text-lg font-bold font-family-2">
+                  <span>Total</span>
+                  <span>{formatCurrency(totalPrice + 5000)}</span>
+                </div>
+              </>
+            )}
+          </section>
         </Col>
       </Row>
 
@@ -303,166 +429,260 @@ const Checkout = () => {
           <h1 className="font-family-3 text-2xl md:text-3xl text-black">
             Billing Details
           </h1>
-          <Form className="mt-3">
+          <Form className="mt-3" aria-label="Billing information form">
             <div className="d-flex gap-3">
-              <Form.Control
-                {...register("firstName", validateFields.name)}
-                placeholder="First Name"
-                type="text"
-                size="md"
-                className="font-family-2 ps-3"
-                defaultValue={userData.firstName}
-              />
-              <Form.Control
-                {...register("lastName", validateFields.name)}
-                placeholder="Last Name"
-                type="text"
-                size="md"
-                className="font-family-2 ps-3"
-                defaultValue={userData.lastName}
-              />
+              <Form.Group className="flex-fill">
+                <Form.Label
+                  htmlFor="firstName-mobile"
+                  className="visually-hidden"
+                >
+                  First Name
+                </Form.Label>
+                <Form.Control
+                  id="firstName-mobile"
+                  {...register("firstName", validateFields.name)}
+                  placeholder="First Name"
+                  type="text"
+                  size="md"
+                  className="font-family-2 ps-3"
+                  defaultValue={userData.firstName}
+                  aria-required="true"
+                />
+              </Form.Group>
+              <Form.Group className="flex-fill">
+                <Form.Label
+                  htmlFor="lastName-mobile"
+                  className="visually-hidden"
+                >
+                  Last Name
+                </Form.Label>
+                <Form.Control
+                  id="lastName-mobile"
+                  {...register("lastName", validateFields.name)}
+                  placeholder="Last Name"
+                  type="text"
+                  size="md"
+                  className="font-family-2 ps-3"
+                  defaultValue={userData.lastName}
+                  aria-required="true"
+                />
+              </Form.Group>
             </div>
-            <Form.Control
-              {...register("email", validateFields.email)}
-              placeholder="Email Address"
-              type="text"
-              size="md"
-              className="font-family-2 ps-3 mt-3"
-              defaultValue={userData.email}
-            />
-            <Form.Control
-              {...register("country", validateFields.country)}
-              placeholder="Country/region"
-              type="text"
-              size="md"
-              className="font-family-2 ps-3 mt-3"
-            />
-            <Form.Control
-              {...register("address", validateFields.address)}
-              placeholder="Street Address"
-              type="text"
-              size="md"
-              className="font-family-2 ps-3 mt-3"
-            />
-            <Form.Control
-              {...register("city", validateFields.city)}
-              placeholder="Town/city"
-              type="text"
-              size="md"
-              className="font-family-2 ps-3 mt-3"
-            />
-            <Form.Control
-              {...register("state", validateFields.state)}
-              placeholder="State"
-              type="text"
-              size="md"
-              className="font-family-2 ps-3 mt-3"
-            />
-            <Form.Control
-              {...register("phone", validateFields.phone)}
-              placeholder="Phone"
-              type="text"
-              size="md"
-              className="font-family-2 ps-3 mt-3"
-            />
+            <Form.Group>
+              <Form.Label htmlFor="email-mobile" className="visually-hidden">
+                Email Address
+              </Form.Label>
+              <Form.Control
+                id="email-mobile"
+                {...register("email", validateFields.email)}
+                placeholder="Email Address"
+                type="email"
+                size="md"
+                className="font-family-2 ps-3 mt-3"
+                defaultValue={userData.email}
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="country-mobile" className="visually-hidden">
+                Country/Region
+              </Form.Label>
+              <Form.Control
+                id="country-mobile"
+                {...register("country", validateFields.country)}
+                placeholder="Country/region"
+                type="text"
+                size="md"
+                className="font-family-2 ps-3 mt-3"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="address-mobile" className="visually-hidden">
+                Street Address
+              </Form.Label>
+              <Form.Control
+                id="address-mobile"
+                {...register("address", validateFields.address)}
+                placeholder="Street Address"
+                type="text"
+                size="md"
+                className="font-family-2 ps-3 mt-3"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="city-mobile" className="visually-hidden">
+                Town/City
+              </Form.Label>
+              <Form.Control
+                id="city-mobile"
+                {...register("city", validateFields.city)}
+                placeholder="Town/city"
+                type="text"
+                size="md"
+                className="font-family-2 ps-3 mt-3"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="state-mobile" className="visually-hidden">
+                State
+              </Form.Label>
+              <Form.Control
+                id="state-mobile"
+                {...register("state", validateFields.state)}
+                placeholder="State"
+                type="text"
+                size="md"
+                className="font-family-2 ps-3 mt-3"
+                aria-required="true"
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label htmlFor="phone-mobile" className="visually-hidden">
+                Phone Number
+              </Form.Label>
+              <Form.Control
+                id="phone-mobile"
+                {...register("phone", validateFields.phone)}
+                placeholder="Phone"
+                type="tel"
+                size="md"
+                className="font-family-2 ps-3 mt-3"
+                aria-required="true"
+              />
+            </Form.Group>
           </Form>
         </Col>
         {/* Order Summary - Visible on all screens */}
         <Col xs={12} className="mt-5">
-          <h1 className="font-family-3 text-3xl lg:text-4xl text-black">
-            Your Order
-          </h1>
-          <hr />
-          {loading ? (
-            <p>Loading cart items...</p>
-          ) : cartData.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            <>
-              <div className="d-flex justify-content-between font-family-2 font-bold">
-                <p>Product</p>
-                <p>SubTotal</p>
+          <section aria-labelledby="order-summary-heading-mobile">
+            <h2
+              id="order-summary-heading-mobile"
+              className="font-family-3 text-3xl lg:text-4xl text-black"
+            >
+              Your Order
+            </h2>
+            <hr />
+            {loading ? (
+              <div role="status" aria-live="polite">
+                <p>Loading cart items...</p>
               </div>
-              {cartData.map((item) => (
-                <div
-                  key={item.product?._id || Math.random()}
-                  className="d-flex justify-content-between font-family-2"
-                >
-                  <p className="text-[#808080]">
-                    {item.product?.title || "Unnamed Product"} x{item.quantity}
-                  </p>
-                  <p className="font-bold">
-                    {formatCurrency(item.product?.price * item.quantity)}
-                  </p>
+            ) : cartData.length === 0 ? (
+              <p>Your cart is empty.</p>
+            ) : (
+              <>
+                <div className="d-flex justify-content-between font-family-2 font-bold">
+                  <span>Product</span>
+                  <span>SubTotal</span>
                 </div>
-              ))}
+                {cartData.map((item) => (
+                  <div
+                    key={item.product?._id || Math.random()}
+                    className="d-flex justify-content-between font-family-2"
+                  >
+                    <span className="text-[#808080]">
+                      {item.product?.title || "Unnamed Product"} x
+                      {item.quantity}
+                    </span>
+                    <span className="font-bold">
+                      {formatCurrency(item.product?.price * item.quantity)}
+                    </span>
+                  </div>
+                ))}
 
-              <hr />
-              <div className="d-flex justify-content-between font-family-2 font-normal">
-                <p className="font-bold">Subtotal</p>
-                <p>{formatCurrency(totalPrice)}</p>
-              </div>
-              <div className="d-flex font-family-2 font-normal">
-                <p className="font-bold">Shipping</p>
-                <span className="ms-auto">
-                  <span className="text-[#808080] inline">
-                    (Regular Shipping)
-                  </span>{" "}
-                  {formatCurrency(5000)}
-                </span>
-              </div>
+                <hr />
+                <div className="d-flex justify-content-between font-family-2 font-normal">
+                  <span className="font-bold">Subtotal</span>
+                  <span>{formatCurrency(totalPrice)}</span>
+                </div>
+                <div className="d-flex font-family-2 font-normal">
+                  <span className="font-bold">Shipping</span>
+                  <span className="ms-auto">
+                    <span className="text-[#808080] inline">
+                      (Regular Shipping)
+                    </span>{" "}
+                    {formatCurrency(5000)}
+                  </span>
+                </div>
 
-              <hr />
-              <div className="d-flex justify-content-between text-lg font-bold font-family-2">
-                <p>Total</p>
-                <p>{formatCurrency(totalPrice + 5000)}</p>
-              </div>
-            </>
-          )}
+                <hr />
+                <div className="d-flex justify-content-between text-lg font-bold font-family-2">
+                  <span>Total</span>
+                  <span>{formatCurrency(totalPrice + 5000)}</span>
+                </div>
+              </>
+            )}
+          </section>
         </Col>
       </Row>
 
       <div className="tom-container md:w-6/12 lg:w-5/12">
-        <h1 className="font-medium  font-family-3">Payment Method</h1>
-        <div>
-          <div className="rounded-lg">
-            <div className="bg-[#F5F5F5] px-3 py-2">
-              <input type="radio" name="payment" id="bank-transfer" />
-              <label htmlFor="bank-transfer" className="ml-[2px]">
-                Direct Bank Transfer
-              </label>
+        <h2 className="font-medium font-family-3">Payment Method</h2>
+        <fieldset>
+          <legend className="visually-hidden">Choose a payment method</legend>
+          <div>
+            <div className="rounded-lg">
+              <div className="bg-[#F5F5F5] px-3 py-2">
+                <input
+                  type="radio"
+                  name="payment"
+                  id="bank-transfer"
+                  value="bank-transfer"
+                  checked={selectedPayment === "bank-transfer"}
+                  onChange={(e) => setSelectedPayment(e.target.value)}
+                  aria-describedby="bank-transfer-description"
+                />
+                <label htmlFor="bank-transfer" className="ml-[2px]">
+                  Direct Bank Transfer
+                </label>
+              </div>
+
+              <p
+                id="bank-transfer-description"
+                className="py-3 px-3 text-sm lg:text-base font-family-2"
+              >
+                Make your payment into our bank account. Please use your Order
+                ID as the payment reference. Your order will not be shipped
+                until the funds have cleared in our account.
+              </p>
+
+              <div className="bg-[#F5F5F5] px-3 py-2">
+                <input
+                  type="radio"
+                  name="payment"
+                  id="paypal"
+                  value="paypal"
+                  checked={selectedPayment === "paypal"}
+                  onChange={(e) => setSelectedPayment(e.target.value)}
+                />
+                <label htmlFor="paypal" className="ml-[2px]">
+                  Paypal
+                </label>
+              </div>
             </div>
 
-            <p className="py-3 px-3 text-sm lg:text-base font-family-2">
-              Make your payment into our bank account. Please use your Order ID
-              as the payment reference. Your order will not be shipped until the
-              funds have cleared in our account.
-            </p>
-
-            <div className="bg-[#F5F5F5] px-3 py-2">
-              <input type="radio" name="payment" id="paypal" />
-              <label htmlFor="paypal" className="ml-[2px]">
-                Paypal
-              </label>
+            <div className="">
+              <img
+                src="/allpay.svg"
+                alt="Accepted payment methods: Visa, Mastercard, American Express, and PayPal"
+                className=""
+              />
             </div>
           </div>
-
-          <div className="">
-            <img src="/allpay.svg" alt="all payment platform" className="" />
-          </div>
-        </div>
+        </fieldset>
 
         <button
           onClick={handlePayWithPaystack}
-          className=" text-white rounded-3 py-2  bg-[#01497C] w-100 mt-4"
+          className="text-white rounded-3 py-2 bg-[#01497C] w-100 mt-4"
+          aria-label="Proceed to payment with Paystack"
         >
           Pay with Paystack
         </button>
       </div>
 
-      <div className="mx-auto lg:w-11/12">
-        <Subscribe />
-      </div>
+      <Subscribe />
     </>
   );
 };

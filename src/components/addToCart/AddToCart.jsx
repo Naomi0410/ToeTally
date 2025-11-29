@@ -6,6 +6,11 @@ import OfferForYou from "../OfferForYou";
 import Alert from "../alert/Alert";
 import Subscribe from "../Subscribe";
 
+// Unique IDs for accessibility
+const PRODUCT_INFO_ID = "product-info-section";
+const SIZE_SELECTION_ID = "size-selection-label";
+const QUANTITY_LABEL_ID = "quantity-label";
+
 const AddToCart = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -102,7 +107,12 @@ const AddToCart = () => {
 
   if (!product)
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div
+        className="flex justify-center items-center min-h-screen"
+        role="status"
+        aria-live="polite"
+        aria-label="Loading product details"
+      >
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#01497C]"></div>
       </div>
     );
@@ -118,11 +128,13 @@ const AddToCart = () => {
       )}
 
       {/* Breadcrumb */}
-      <motion.div
+      <motion.nav
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         style={{ backgroundColor: "#EBEBEB" }}
+        role="navigation"
+        aria-label="Breadcrumb"
       >
         <div className="px-12 lg:py-2 xl:py-3 lg:flex gap-3 hidden">
           <Link
@@ -131,7 +143,10 @@ const AddToCart = () => {
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-base">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-base"
+          >
             /
           </span>
           <Link
@@ -140,10 +155,16 @@ const AddToCart = () => {
           >
             Shop
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-base">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-base"
+          >
             /
           </span>
-          <span className="font-semibold font-family-2 text-base text-black">
+          <span
+            aria-current="page"
+            className="font-semibold font-family-2 text-base text-black"
+          >
             Product
           </span>
         </div>
@@ -155,7 +176,10 @@ const AddToCart = () => {
           >
             Home
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-xs">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-xs"
+          >
             /
           </span>
           <Link
@@ -164,17 +188,30 @@ const AddToCart = () => {
           >
             Shop
           </Link>
-          <span className="font-semibold text-customLightGray font-family-1 text-xs">
+          <span
+            aria-hidden="true"
+            className="font-semibold text-customLightGray font-family-1 text-xs"
+          >
             /
           </span>
-          <span className="font-semibold font-family-2 text-xs text-black">
+          <span
+            aria-current="page"
+            className="font-semibold font-family-2 text-xs text-black"
+          >
             Product
           </span>
         </div>
-      </motion.div>
+      </motion.nav>
 
       {/* Product Details for large screen */}
-      <div className="mx-auto hidden lg:block px-12 mt-8 mb-12">
+      <main
+        role="main"
+        aria-labelledby={PRODUCT_INFO_ID}
+        className="mx-auto hidden lg:block px-12 mt-8 mb-12"
+      >
+        <h1 id={PRODUCT_INFO_ID} className="sr-only">
+          {product.title} Product Details
+        </h1>
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Image Section */}
           <motion.div
@@ -190,11 +227,15 @@ const AddToCart = () => {
             >
               <img
                 src={previewImage}
-                alt={product.title}
+                alt={`${product.title} - main preview image`}
                 className="w-full h-[300px] lg:h-[400px] object-contain"
               />
             </motion.div>
-            <div className="px-2 flex gap-3 mt-4 overflow-x-auto">
+            <div
+              role="group"
+              aria-label="Alternative product views"
+              className="px-2 flex gap-3 mt-4 overflow-x-auto"
+            >
               {product.image?.map((img, index) => (
                 <motion.img
                   key={index}
@@ -208,6 +249,15 @@ const AddToCart = () => {
                   onClick={() => setPreviewImage(img)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  role="button"
+                  tabIndex={0} // Make the image clickable and focusable
+                  aria-label={`Show view ${index + 1} of ${product.title}`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setPreviewImage(img);
+                    }
+                  }}
                 />
               ))}
             </div>
@@ -240,10 +290,18 @@ const AddToCart = () => {
 
             {/* Size Selection */}
             <div className="mt-4">
-              <h3 className="text-xl font-semibold font-family-2 mb-2">
+              <h3
+                className="text-xl font-semibold font-family-2 mb-2"
+                id={SIZE_SELECTION_ID}
+              >
                 Select Size
               </h3>
-              <div className="flex flex-wrap gap-3">
+              <div
+                className="flex flex-wrap gap-3"
+                role="group"
+                aria-labelledby={SIZE_SELECTION_ID}
+                aria-live="polite"
+              >
                 {product.size?.map((size) => (
                   <motion.button
                     key={size}
@@ -255,32 +313,55 @@ const AddToCart = () => {
                     onClick={() => setSelectedSize(size)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    aria-pressed={selectedSize === size}
+                    aria-label={`Select size ${size}`}
                   >
                     {size}
                   </motion.button>
                 ))}
+                {/* Announcement for selected size */}
+                {selectedSize && (
+                  <span className="sr-only" aria-live="polite">
+                    Size {selectedSize} selected.
+                  </span>
+                )}
               </div>
             </div>
             {/* Quantity */}
             <div className="mt-4">
-              <h3 className="text-xl font-semibold font-family-2 mb-2">
+              <h3
+                className="text-xl font-semibold font-family-2 mb-2"
+                id={QUANTITY_LABEL_ID}
+              >
                 Quantity
               </h3>
-              <div className="inline-flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
+              <div
+                className="inline-flex items-center border-2 border-gray-300 rounded-xl overflow-hidden"
+                role="group"
+                aria-labelledby={QUANTITY_LABEL_ID}
+              >
                 <motion.button
                   className="px-4 py-2 hover:bg-gray-100 transition-colors font-bold text-lg"
                   onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
                   whileTap={{ scale: 0.9 }}
+                  aria-label="Decrease quantity"
                 >
                   -
                 </motion.button>
-                <span className="px-6 py-2 text-lg font-semibold border-x-2 border-gray-300 min-w-[80px] text-center">
+                <span
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  aria-label={`Current quantity: ${quantity}`}
+                  className="px-6 py-2 text-lg font-semibold border-x-2 border-gray-300 min-w-[80px] text-center"
+                >
                   {quantity}
                 </span>
                 <motion.button
                   className="px-4 py-2 hover:bg-gray-100 transition-colors font-bold text-lg"
                   onClick={() => setQuantity((prev) => prev + 1)}
                   whileTap={{ scale: 0.9 }}
+                  aria-label="Increase quantity"
                 >
                   +
                 </motion.button>
@@ -294,6 +375,10 @@ const AddToCart = () => {
                 disabled={isAddingToCart}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                aria-live={isAddingToCart ? "assertive" : "off"}
+                aria-label={
+                  isAddingToCart ? "Adding to Cart..." : "Add To Cart"
+                }
               >
                 {isAddingToCart ? "Adding to Cart..." : "Add To Cart"}
               </motion.button>
@@ -326,10 +411,14 @@ const AddToCart = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </main>
 
       {/* Product Details for medium and small screen */}
-      <div className="lg:hidden mx-auto px-3 mt-8 mb-12">
+      <div
+        className="lg:hidden mx-auto px-3 mt-8 mb-12"
+        role="main"
+        aria-labelledby={PRODUCT_INFO_ID}
+      >
         <div className="grid md:grid-cols-2 gap-8">
           {/* Image Section */}
           <motion.div
@@ -345,11 +434,15 @@ const AddToCart = () => {
             >
               <img
                 src={previewImage}
-                alt={product.title}
+                alt={`${product.title} - main preview image`}
                 className="w-full h-[300px] object-contain"
               />
             </motion.div>
-            <div className="px-2 flex gap-3 mt-4 overflow-x-auto">
+            <div
+              role="group"
+              aria-label="Alternative product views"
+              className="px-2 flex gap-3 mt-4 overflow-x-auto"
+            >
               {product.image?.map((img, index) => (
                 <motion.img
                   key={index}
@@ -363,6 +456,15 @@ const AddToCart = () => {
                   onClick={() => setPreviewImage(img)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Show view ${index + 1} of ${product.title}`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setPreviewImage(img);
+                    }
+                  }}
                 />
               ))}
             </div>
@@ -394,10 +496,18 @@ const AddToCart = () => {
             </div>
             {/* Size Selection */}
             <div className="mt-3">
-              <h3 className="text-xl font-semibold font-family-2 mb-2">
+              <h3
+                className="text-xl font-semibold font-family-2 mb-2"
+                id={`${SIZE_SELECTION_ID}-mobile`}
+              >
                 Select Size
               </h3>
-              <div className="flex flex-wrap gap-3">
+              <div
+                className="flex flex-wrap gap-3"
+                role="group"
+                aria-labelledby={`${SIZE_SELECTION_ID}-mobile`}
+                aria-live="polite"
+              >
                 {product.size?.map((size) => (
                   <motion.button
                     key={size}
@@ -409,32 +519,55 @@ const AddToCart = () => {
                     onClick={() => setSelectedSize(size)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    aria-pressed={selectedSize === size}
+                    aria-label={`Select size ${size}`}
                   >
                     {size}
                   </motion.button>
                 ))}
+                {/* Announcement for selected size */}
+                {selectedSize && (
+                  <span className="sr-only" aria-live="polite">
+                    Size {selectedSize} selected.
+                  </span>
+                )}
               </div>
             </div>
             {/* Quantity */}
             <div className="mt-3">
-              <h3 className="text-xl font-semibold font-family-2 mb-2">
+              <h3
+                className="text-xl font-semibold font-family-2 mb-2"
+                id={`${QUANTITY_LABEL_ID}-mobile`}
+              >
                 Quantity
               </h3>
-              <div className="inline-flex items-center border-2 border-gray-300 rounded-xl overflow-hidden">
+              <div
+                className="inline-flex items-center border-2 border-gray-300 rounded-xl overflow-hidden"
+                role="group"
+                aria-labelledby={`${QUANTITY_LABEL_ID}-mobile`}
+              >
                 <motion.button
                   className="px-4 py-2 hover:bg-gray-100 transition-colors font-bold text-lg"
                   onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
                   whileTap={{ scale: 0.9 }}
+                  aria-label="Decrease quantity"
                 >
                   -
                 </motion.button>
-                <span className="px-6 py-2 text-lg font-semibold border-x-2 border-gray-300 min-w-[80px] text-center">
+                <span
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  aria-label={`Current quantity: ${quantity}`}
+                  className="px-6 py-2 text-lg font-semibold border-x-2 border-gray-300 min-w-[80px] text-center"
+                >
                   {quantity}
                 </span>
                 <motion.button
                   className="px-4 py-2 hover:bg-gray-100 transition-colors font-bold text-lg"
                   onClick={() => setQuantity((prev) => prev + 1)}
                   whileTap={{ scale: 0.9 }}
+                  aria-label="Increase quantity"
                 >
                   +
                 </motion.button>
@@ -448,6 +581,10 @@ const AddToCart = () => {
                 disabled={isAddingToCart}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                aria-live={isAddingToCart ? "assertive" : "off"}
+                aria-label={
+                  isAddingToCart ? "Adding to Cart..." : "Add To Cart"
+                }
               >
                 {isAddingToCart ? "Adding to Cart..." : "Add To Cart"}
               </motion.button>
@@ -490,10 +627,16 @@ const AddToCart = () => {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
+        role="region"
+        aria-label="Shopping Benefits and Policies"
         className="text-[#808080] mt-8 font-family-2 grid grid-cols-1 lg:grid-cols-3 gap-8 py-8 mx-center px-12 max-w-7xl mx-auto "
       >
         <div className="flex flex-col lg:flex-row gap-3 items-center text-center lg:text-left">
-          <img src="/bef1.svg" alt="Free Shipping" className="w-16 h-16" />
+          <img
+            src="/bef1.svg"
+            alt="Delivery Truck Icon"
+            className="w-16 h-16"
+          />
           <div>
             <h2 className="text-lg lg:text-sm xl:text-lg font-bold text-gray-900">
               Fast & Free Shipping
@@ -517,7 +660,7 @@ const AddToCart = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-3 items-center text-center lg:text-left">
-          <img src="/bef3.svg" alt="Quality Products" className="w-16 h-16" />
+          <img src="/bef3.svg" alt="Quality Badge Icon" className="w-16 h-16" />
           <div>
             <h2 className="text-lg lg:text-sm xl:text-lg font-bold text-gray-900">
               Top Quality Products

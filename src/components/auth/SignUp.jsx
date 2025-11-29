@@ -130,6 +130,7 @@ const SignUp = () => {
           <img
             src="/authv.svg"
             alt="auth vector"
+            aria-hidden="true"
             className="absolute bottom-8"
           />
         </div>
@@ -163,15 +164,23 @@ const SignUp = () => {
                   First Name
                 </label>
                 <input
+                  id="firstName"
                   type="text"
                   {...register("firstName", {
                     required: "First name is required",
                   })}
                   placeholder="First Name*"
+                  aria-invalid={errors.firstName ? "true" : "false"}
+                  aria-describedby="firstName-error"
+                  autoComplete="given-name"
                   className="rounded-sm outline-none border-[#696767] w-full border-[1px] px-2 py-2"
                 />
                 {errors.firstName && (
-                  <p className="text-red-500 text-sm">
+                  <p
+                    id="firstName-error"
+                    role="alert"
+                    className="text-red-500  text-sm"
+                  >
                     {errors.firstName.message}
                   </p>
                 )}
@@ -185,15 +194,23 @@ const SignUp = () => {
                   Last Name
                 </label>
                 <input
+                  id="lastName"
                   type="text"
                   {...register("lastName", {
                     required: "Last name is required",
                   })}
                   placeholder="Last Name*"
+                  aria-invalid={errors.lastName ? "true" : "false"}
+                  aria-describedby="lastName-error"
+                  autoComplete="family-name"
                   className="rounded-sm outline-none border-[#696767] w-full border-[1px] px-2 py-2"
                 />
                 {errors.lastName && (
-                  <p className="text-red-500 text-sm">
+                  <p
+                    id="lastName-error"
+                    role="alert"
+                    className="text-red-500 text-sm"
+                  >
                     {errors.lastName.message}
                   </p>
                 )}
@@ -209,9 +226,12 @@ const SignUp = () => {
                 Email
               </label>
               <input
+                id="email"
                 type="email"
                 {...register("email", { required: "Email is required" })}
                 placeholder="Email*"
+                aria-invalid={errors.email ? "true" : "false"}
+                autoComplete="email"
                 className="outline-none w-full px-2 py-2 border-[1px] border-[#696767] rounded-sm"
               />
               {errors.email && (
@@ -228,18 +248,31 @@ const SignUp = () => {
                 Password
               </label>
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 {...register("password", { required: "Password is required" })}
                 placeholder="Password*"
+                aria-invalid={errors.password ? "true" : "false"}
+                aria-describedby={
+                  errors.password
+                    ? "password-error password-requirements"
+                    : "password-requirements"
+                }
+                autoComplete="new-password"
                 className="outline-none w-full px-2 py-2 border-[1px] border-[#696767] rounded-sm"
-                onChange={handlePasswordChange}
+                onChange={(e) => {
+                  register("password").onChange(e);
+                  handlePasswordChange(e);
+                }}
               />
-              <div
+              <button
+                type="button"
                 className="absolute right-3 top-11 lg:top-3 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </div>
+              </button>
               {errors.password && (
                 <p className="text-red-500 text-sm">
                   {errors.password.message}
@@ -248,7 +281,12 @@ const SignUp = () => {
             </div>
 
             {/* Password Validation */}
-            <div className="mt-2">
+            <div
+              id="password-requirements"
+              role="region"
+              aria-live="polite"
+              className="mt-2"
+            >
               <p
                 className={`text-sm ${
                   passwordValidation.minLength
@@ -256,8 +294,11 @@ const SignUp = () => {
                     : "text-[#979797]"
                 }`}
               >
-                {passwordValidation.minLength ? "✔" : "✖"} Minimum of 8
-                characters
+                {" "}
+                <span aria-hidden="true">
+                  {passwordValidation.minLength ? "✔" : "✖"}
+                </span>{" "}
+                Minimum of 8 characters
               </p>
               <p
                 className={`text-sm ${
@@ -268,11 +309,14 @@ const SignUp = () => {
                     : "text-[#979797]"
                 }`}
               >
-                {passwordValidation.hasUppercase &&
-                passwordValidation.hasLowercase &&
-                passwordValidation.hasNumber
-                  ? "✔"
-                  : "✖"}{" "}
+                {" "}
+                <span aria-hidden="true">
+                  {passwordValidation.hasUppercase &&
+                  passwordValidation.hasLowercase &&
+                  passwordValidation.hasNumber
+                    ? "✔"
+                    : "✖"}
+                </span>{" "}
                 Uppercase, lowercase letters, and one number
               </p>
             </div>
@@ -282,6 +326,9 @@ const SignUp = () => {
               <button
                 type="submit"
                 className="bg-[#01497C] w-full py-2.5 rounded-md mx-auto text-white flex justify-center items-center"
+                disabled={isLoading}
+                aria-busy={isLoading ? "true" : "false"}
+                aria-label={isLoading ? "Registering, please wait" : "Register"}
               >
                 {isLoading ? (
                   <LineWave
