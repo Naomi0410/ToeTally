@@ -99,75 +99,83 @@ const Blog = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 xl:gap-10"
         >
           {blogItems.map((item, index) => (
-            <motion.article
+            <Link
               key={item.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              role="listitem"
-              className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-300"
+              to={`/blog/${item.slug}`}
+              className="no-underline"
             >
-              <motion.div
-                className="relative overflow-hidden aspect-[16/10]"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.4 }}
+              <motion.article
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                role="listitem"
+                className="group bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-300"
               >
-                <Image
-                  src={item.image}
-                  className="w-full h-full object-cover"
-                  alt={`Featured image for ${item.title}`}
-                />
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
-                ></motion.div>
-              </motion.div>
-
-              <div className="p-4">
-                <motion.p
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  className="font-family-2 text-[#01497C] text-base lg:text-lg xl:text-xl font-semibold mb-2"
+                  className="relative overflow-hidden aspect-[16/10]"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <span className="visually-hidden">Category: </span>
-                  {item.category}
-                </motion.p>
-                <h3 className="font-family-2 text-base lg:text-xl xl:text-2xl font-bold mb-3 text-gray-900 group-hover:text-[#01497C] transition-colors line-clamp-2">
-                  {item.title}
-                </h3>
-                <p className="font-family-2 text-base lg:text-lg xl:text-xl text-gray-600 mb-5 line-clamp-3">
-                  {item.text}
-                </p>
+                  <Image
+                    src={item.image}
+                    className="w-full h-full object-cover"
+                    alt={`Featured image for ${item.title}`}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
+                  ></motion.div>
+                </motion.div>
 
-                <footer className="flex justify-between items-center text-gray-500">
-                  <time
-                    dateTime={item.date}
-                    className="flex items-center gap-2 font-family-2 text-sm lg:text-base xl:text-lg"
+                <div className="p-4">
+                  <motion.p
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 + index * 0.1 }}
+                    className="font-family-2 text-[#01497C] text-base lg:text-lg xl:text-xl font-semibold mb-2"
                   >
-                    <FaRegCalendarDays
-                      aria-hidden="true"
-                      className="text-[#01497C]"
-                    />
-                    <span className="visually-hidden">Published on </span>
-                    {item.date}
-                  </time>
-                  <span
-                    className="flex items-center gap-2 font-family-2 text-sm lg:text-base xl:text-lg"
-                    aria-label="Reading time: 5 minutes"
-                  >
-                    <FaRegClock className="text-[#01497C]" aria-hidden="true" />
-                    5 mins read
-                  </span>
-                </footer>
-              </div>
-            </motion.article>
+                    <span className="visually-hidden">Category: </span>
+                    {item.category}
+                  </motion.p>
+                  <h3 className="font-family-2 text-base lg:text-xl xl:text-2xl font-bold mb-3 text-gray-900 group-hover:text-[#01497C] transition-colors line-clamp-2">
+                    {item.title}
+                  </h3>
+                  <p className="font-family-2 text-base lg:text-lg xl:text-xl text-gray-600 mb-5 line-clamp-3">
+                    {item.text}
+                  </p>
+
+                  <footer className="flex justify-between items-center text-gray-500">
+                    <time
+                      dateTime={item.date}
+                      className="flex items-center gap-2 font-family-2 text-sm lg:text-base xl:text-lg"
+                    >
+                      <FaRegCalendarDays
+                        aria-hidden="true"
+                        className="text-[#01497C]"
+                      />
+                      <span className="visually-hidden">Published on </span>
+                      {item.date}
+                    </time>
+                    <span
+                      className="flex items-center gap-2 font-family-2 text-sm lg:text-base xl:text-lg"
+                      aria-label={`Reading time: ${item.readTime}`}
+                    >
+                      <FaRegClock
+                        className="text-[#01497C]"
+                        aria-hidden="true"
+                      />
+                      {item.readTime}
+                    </span>
+                  </footer>
+                </div>
+              </motion.article>
+            </Link>
           ))}
         </div>
       </section>
@@ -192,74 +200,79 @@ const Blog = () => {
               role="listitem"
               className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
             >
-              <motion.div
-                className="relative overflow-hidden aspect-[16/10]"
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Image
-                  src={item.image}
-                  alt={`Featured image for ${item.title}`}
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-
-              <div className="p-3">
-                <motion.p
-                  initial={{ opacity: 0, x: -15 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  className="font-family-2 text-[#01497C] text-sm font-semibold mb-2"
-                >
-                  <span className="visually-hidden">Category: </span>
-                  {item.category}
-                </motion.p>
-                <h3 className="font-family-2 text-base font-bold mb-2 text-gray-900 line-clamp-2">
-                  {item.title}
-                </h3>
-                <p className="font-family-2 text-xs text-gray-600 mb-4 line-clamp-3">
-                  {item.text}
-                </p>
-
-                <footer className="flex justify-between items-center mb-4 text-gray-500">
-                  <time
-                    className="flex items-center gap-2 font-family-2 text-xs"
-                    dateTime={item.date}
-                  >
-                    <FaRegCalendarDays
-                      aria-hidden="true"
-                      className="text-[#01497C]"
-                    />
-                    <span className="visually-hidden">Published on </span>
-                    {item.date}
-                  </time>
-                  <span
-                    aria-label="Reading time: 5 minutes"
-                    className="flex items-center gap-2 font-family-2 text-xs"
-                  >
-                    <FaRegClock aria-hidden="true" className="text-[#01497C]" />
-                    5 mins read
-                  </span>
-                </footer>
-
+              <Link to={`/blog/${item.slug}`} className="no-underline">
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  className="relative overflow-hidden aspect-[16/10]"
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <ActionButton
-                    variant="none"
-                    size="sm"
-                    text="Read More"
-                    style={{
-                      backgroundColor: "#01497C",
-                      fontFamily: "Alexandria variable",
-                    }}
-                    aria-label={`Read more about ${item.title}`}
-                    className="font-family-2 rounded-5 w-full text-white hover:bg-[#013A63] transition-colors"
+                  <Image
+                    src={item.image}
+                    alt={`Featured image for ${item.title}`}
+                    className="w-full h-full object-cover"
                   />
                 </motion.div>
-              </div>
+
+                <div className="p-3">
+                  <motion.p
+                    initial={{ opacity: 0, x: -15 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 + index * 0.1 }}
+                    className="font-family-2 text-[#01497C] text-sm font-semibold mb-2"
+                  >
+                    <span className="visually-hidden">Category: </span>
+                    {item.category}
+                  </motion.p>
+                  <h3 className="font-family-2 text-base font-bold mb-2 text-gray-900 line-clamp-2">
+                    {item.title}
+                  </h3>
+                  <p className="font-family-2 text-xs text-gray-600 mb-4 line-clamp-3">
+                    {item.text}
+                  </p>
+
+                  <footer className="flex justify-between items-center mb-4 text-gray-500">
+                    <time
+                      className="flex items-center gap-2 font-family-2 text-xs"
+                      dateTime={item.date}
+                    >
+                      <FaRegCalendarDays
+                        aria-hidden="true"
+                        className="text-[#01497C]"
+                      />
+                      <span className="visually-hidden">Published on </span>
+                      {item.date}
+                    </time>
+                    <span
+                      aria-label={`Reading time: ${item.readTime}`}
+                      className="flex items-center gap-2 font-family-2 text-xs"
+                    >
+                      <FaRegClock
+                        aria-hidden="true"
+                        className="text-[#01497C]"
+                      />
+                      {item.readTime}
+                    </span>
+                  </footer>
+
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <ActionButton
+                      variant="none"
+                      size="sm"
+                      text="Read More"
+                      style={{
+                        backgroundColor: "#01497C",
+                        fontFamily: "Alexandria variable",
+                      }}
+                      aria-label={`Read more about ${item.title}`}
+                      className="font-family-2 rounded-5 w-full text-white hover:bg-[#013A63] transition-colors"
+                    />
+                  </motion.div>
+                </div>
+              </Link>
             </motion.article>
           ))}
         </div>
@@ -270,19 +283,3 @@ const Blog = () => {
   );
 };
 export default Blog;
-
-<style jsx>{`
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-`}</style>;

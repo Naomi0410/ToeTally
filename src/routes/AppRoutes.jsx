@@ -10,6 +10,7 @@ import NotFound from "../pages/NotFound";
 import OrderConfirmation from "../pages/OrderConfirmation";
 import { Loader } from "../components";
 import ScrollToTop from "../components/ScrollToTop";
+import BlogPost from "../pages/BlogPost";
 
 const RootLayout = lazy(() => import("../layouts/RootLayout"));
 
@@ -30,6 +31,7 @@ export default function AppRoutes() {
         { path: "/contact-us", element: <ContactUs /> },
         { path: "/cart", element: <Cart /> },
         { path: "/blog", element: <Blog /> },
+        { path: "/blog/:slug", element: <BlogPost /> },
         { path: "/checkout", element: <Checkout /> },
         { path: "/orderconfirmation", element: <OrderConfirmation /> },
         {

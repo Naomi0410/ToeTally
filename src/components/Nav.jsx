@@ -14,7 +14,6 @@ import { ClipLoader } from "react-spinners";
 
 const Nav = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
@@ -26,32 +25,45 @@ const Nav = () => {
       try {
         const token = localStorage.getItem("token");
         const id = localStorage.getItem("userId");
-        console.log("Token:", token);
-        console.log("ID:", id);
 
+        // If no token/id, immediately set user to null and return
         if (!token || !id) {
           setUser(null);
           return;
         }
+
+        // Fetch user with 10 second timeout
         const response = await axios.get(
           `https://backend-toetally-1.onrender.com/api/auth/getUser/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            timeout: 10000, // 10 second timeout
           }
         );
-        console.log("Response:", response);
-        console.log("User:", response.data);
+
+        console.log("User fetched successfully:", response.data);
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
+
+        // If unauthorized or token expired, clear storage
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          console.log("Token invalid, clearing localStorage");
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+        }
+
+        // If timeout error
+        if (error.code === "ECONNABORTED") {
+          console.log("Request timed out after 10 seconds");
+        }
+
         setUser(null);
-      } finally {
-        setLoading(false);
-        console.log("Component finished rendering");
       }
     };
+
     fetchUser();
   }, []);
 
@@ -59,7 +71,7 @@ const Nav = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      
+
       // If near top, show normal nav
       if (scrollPosition <= 100) {
         setIsSticky(false);
@@ -81,7 +93,7 @@ const Nav = () => {
           setIsSticky(true);
           setIsVisible(true);
         }
-      }, 1000); 
+      }, 1000);
 
       setScrollTimeout(newTimeout);
     };
@@ -123,21 +135,21 @@ const Nav = () => {
     return () => window.removeEventListener("keydown", handleEscape);
   }, [showLogoutModal]);
 
-  if (loading) {
-    return null;
-  }
-
   return (
     <>
       <header
         className={`border-b-2 d-none d-md-block ${
-          isSticky
-            ? "fixed top-0 left-0 right-0 bg-white shadow-md z-40"
-            : ""
+          isSticky ? "fixed top-0 left-0 right-0 bg-white shadow-md z-40" : ""
         }`}
         style={{
-          transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease",
-          transform: isSticky && isVisible ? "translateY(0)" : isSticky ? "translateY(-100%)" : "none",
+          transition:
+            "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease",
+          transform:
+            isSticky && isVisible
+              ? "translateY(0)"
+              : isSticky
+              ? "translateY(-100%)"
+              : "none",
           opacity: isSticky && isVisible ? "1" : isSticky ? "0" : "1",
         }}
         role="banner"
@@ -353,7 +365,9 @@ const Nav = () => {
       </header>
 
       {/* Spacer to prevent content jump when nav becomes fixed */}
-      {isSticky && <div className="d-none d-md-block" style={{ height: "73px" }} />}
+      {isSticky && (
+        <div className="d-none d-md-block" style={{ height: "73px" }} />
+      )}
 
       {/* small screen */}
       <header
@@ -361,8 +375,14 @@ const Nav = () => {
           isSticky ? "fixed top-0 left-0 right-0 bg-white shadow-md z-40" : ""
         }`}
         style={{
-          transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease",
-          transform: isSticky && isVisible ? "translateY(0)" : isSticky ? "translateY(-100%)" : "none",
+          transition:
+            "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease",
+          transform:
+            isSticky && isVisible
+              ? "translateY(0)"
+              : isSticky
+              ? "translateY(-100%)"
+              : "none",
           opacity: isSticky && isVisible ? "1" : isSticky ? "0" : "1",
         }}
         role="banner"
@@ -389,7 +409,9 @@ const Nav = () => {
       </header>
 
       {/* Spacer for mobile sticky nav */}
-      {isSticky && <div className="d-block d-md-none" style={{ height: "60px" }} />}
+      {isSticky && (
+        <div className="d-block d-md-none" style={{ height: "60px" }} />
+      )}
     </>
   );
 };
